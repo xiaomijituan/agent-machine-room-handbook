@@ -1,0 +1,37 @@
+name: gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  gates:
+    name: gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 本仓库只有一个开发依赖（prettier），内容检查全是 node 自带模块
+      - run: npm ci
+
+      - name: 格式化检查
+        run: npm run format:check
+
+      - name: 内容自检（五件套 / 剧本字段 / 记录文件 / 链接 / 验证记录 / 身份掩码）
+        run: npm run check
+
+      # 下面这一步等 fusion 打出 v0.1.0、随版本附上 scenario-check.mjs 之后再启用。
+      # 剧本格式的权威校验在那份发版产物里，本仓库不复制 fusion 的源码（ADR-0001）。
+      #
+      # - name: 剧本格式校验（fusion 发版产物）
+      #   run: |
+      #     curl -sfL -o scenario-check.mjs \
+      #       https://github.com/xiaomijituan/fusion/releases/download/v0.1.0/scenario-check.mjs
+      #     for f in chapters/*/scenario.json; do node scenario-check.mjs "$f" --strict; done

@@ -7,9 +7,11 @@
   "scripts": {
     "check": "node scripts/check.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "prettier": "^3.6.2"
   }
 }
