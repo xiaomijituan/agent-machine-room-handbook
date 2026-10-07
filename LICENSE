@@ -20,8 +20,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----
-
-本文件只覆盖本仓库里的代码与数据，范围见 LICENSE-docs.md 的说明：
-`scripts/`、`tools/`、各章的 `scenario.json` 与 `reference.jsonl`。
-正文（`index.md`、`verify.md`、`china.md`、README、STYLE、GLOSSARY）用 CC BY 4.0。
