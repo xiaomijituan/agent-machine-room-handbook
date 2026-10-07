@@ -45,18 +45,19 @@ const KNOWN_KINDS = ["answer", "dispatch", "kill"];
 const KNOWN_TYPES = ["transition", "decision", "run.end"];
 const KNOWN_STATUS = ["working", "blocked", "done", "idle"];
 
-const collectMarkdown = (dir) => {
+const collect = (dir, extension) => {
   const out = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...collectMarkdown(full));
-    else if (entry.name.endsWith(".md")) out.push(full);
+    if (entry.isDirectory()) out.push(...collect(full, extension));
+    else if (entry.name.endsWith(extension)) out.push(full);
   }
   return out;
 };
 
-const mdFiles = collectMarkdown(root);
+const mdFiles = collect(root, ".md");
+const textFiles = mdFiles.concat(collect(root, ".jsonl"));
 
 // 一、真实身份信息不许进正文：扫出非保留段的 IPv4 就报错
 const ipv4 = /\b(\d{1,3}(?:\.\d{1,3}){3})\b/g;
@@ -70,6 +71,20 @@ for (const file of mdFiles) {
         "出现了不是占位符的 IPv4：" +
           ip +
           "（入库前换成 203.0.113.x 或 192.0.2.x）",
+      );
+    }
+  }
+}
+
+// 同类检查：设备名必须已掩码。pong from 后面只准出现占位符——
+// 这样门禁不需要知道真实名字是什么，真实名字也就不会被写进这个脚本里。
+const pongName = /pong from (\S+) \(/g;
+for (const file of textFiles) {
+  for (const match of readFileSync(file, "utf8").matchAll(pongName)) {
+    if (!/^<.*>$/.test(match[1])) {
+      fail(
+        rel(file),
+        "pong from 后面是真实设备名，入库前换成 <phone> 或 <peer>",
       );
     }
   }
