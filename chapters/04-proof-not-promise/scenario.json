@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch04-proof-not-promise",
+  "version": "0.1",
+  "name": "别信「我做完了」",
+  "hosts": [
+    {
+      "id": "home-pc",
+      "role": "家里电脑",
+      "place": "AI 在这里干活，日志也在这里"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "claim-green",
+      "project": "验收",
+      "title": "AI 说测试全绿，但没贴输出",
+      "lines": {
+        "zh": [
+          "改完了，测试全部通过",
+          "没有贴任何命令输出",
+          "也没有说改了哪几个文件"
+        ]
+      },
+      "question": {
+        "text": "只有结论，没有证据。下一步：",
+        "options": [
+          {
+            "id": "ask-evidence",
+            "label": "要三样：改了哪些文件、跑了哪条命令、命令打印了什么"
+          },
+          { "id": "trust", "label": "信它，直接合进去" },
+          { "id": "kill", "label": "不收了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "numbers-off",
+      "project": "验收",
+      "title": "贴了输出，但和它说的话不一致",
+      "lines": {
+        "zh": [
+          "AI 贴了一段输出，末行写着 12 个用例通过",
+          "可它前面说改了两个文件，输出的文件名只出现一个",
+          "用例总数跟仓库里的测试文件数量也对不上"
+        ]
+      },
+      "question": {
+        "text": "数字对不上，谁都不许先合。先查哪个：",
+        "options": [
+          {
+            "id": "check-files",
+            "label": "先核对改了哪几个文件，文件对不上就别看输出了"
+          },
+          { "id": "rerun", "label": "我自己跑一遍那条命令，看是不是 12 个" },
+          { "id": "kill", "label": "不查了，关掉这次改动" }
+        ]
+      }
+    },
+    {
+      "key": "rerun-with-log",
+      "project": "验收",
+      "title": "空着一块屏，可以要求带日志重跑",
+      "lines": {
+        "zh": ["空闲着，等一句话任务", "上一条改动已经交出去了，现在手上没有活"]
+      },
+      "question": {
+        "text": "重跑这件事，怎么要求才有结果可看？",
+        "options": [
+          {
+            "id": "log-to-file",
+            "label": "要求把完整输出写进一个日志文件，并给出文件位置"
+          },
+          { "id": "paste", "label": "要求把输出直接贴在回复里" },
+          { "id": "kill", "label": "不重跑了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "home-pc",
+      "task": "claim-green",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 100
+    },
+    {
+      "host": "home-pc",
+      "task": "numbers-off",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 90
+    },
+    {
+      "host": "home-pc",
+      "task": "rerun-with-log",
+      "kind": "opencode",
+      "status": "idle",
+      "progress": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vercel/
+output/
+screenshots/
+*.log
+.DS_Store
+
+# 作者的过程稿，不入库
+任务*.md
+docs/GIT.md
+docs/build-log.md
+docs/from-zero-to-public.md
+docs/ci-playbook.md

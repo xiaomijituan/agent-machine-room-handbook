@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch03-three-ai-one-repo",
+  "version": "0.1",
+  "name": "三个 AI，一个仓库",
+  "hosts": [
+    {
+      "id": "home-pc",
+      "role": "家里电脑",
+      "place": "三个 AI 都在这台机器上，共用一个仓库目录"
+    },
+    {
+      "id": "proxy-out",
+      "role": "代理出口",
+      "place": "只有一个端口 127.0.0.1:7897，三个 AI 都从这儿出去"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "edit-login",
+      "project": "登录改造",
+      "title": "改登录流程，动了 session 那个文件",
+      "lines": {
+        "zh": [
+          "改了 session 文件的第 40 行，加了超时重试",
+          "等一下，这个文件现在不是 40 行了",
+          "另一块屏也动过这里，我的改动盖掉了它的改动"
+        ]
+      },
+      "question": {
+        "text": "两个 AI 改了同一处。你手上只有这一份现状，怎么办？",
+        "options": [
+          {
+            "id": "redo",
+            "label": "两块屏都退回起点，改成一次只让一个动这个文件"
+          },
+          { "id": "merge-manual", "label": "我手工合一下，凑着用" },
+          { "id": "kill", "label": "关掉这一块，先不管登录" }
+        ]
+      }
+    },
+    {
+      "key": "edit-schema",
+      "project": "数据库",
+      "title": "改表结构，改完发现别人在等这份产物",
+      "lines": {
+        "zh": [
+          "表结构改完了，字段名换了",
+          "第三块屏说它在等旧字段名写完的测试",
+          "它等到的版本已经变了，测试从刚才那一步开始就注定失败"
+        ]
+      },
+      "question": {
+        "text": "等产物的那个 AI 不知道产物变了。先做什么？",
+        "options": [
+          { "id": "announce", "label": "先告诉等的那块屏：字段名换了，重来" },
+          { "id": "revert", "label": "把字段名改回去，先让测试跑通" },
+          { "id": "kill", "label": "关掉等的那块屏，回头再说" }
+        ]
+      }
+    },
+    {
+      "key": "write-tests",
+      "project": "测试",
+      "title": "补测试，等前面的活稳定下来再动",
+      "lines": {
+        "zh": ["空闲着，等一句话任务", "上一个任务已经交出去了，现在手上没有活"]
+      },
+      "question": {
+        "text": "这块屏现在能用，派给它的活怎么描述？",
+        "options": [
+          {
+            "id": "with-accept",
+            "label": "派活时写清怎么算做完，包含要跑的命令"
+          },
+          { "id": "loose", "label": "随便说一句，让它自己判断" },
+          { "id": "kill", "label": "不派了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "home-pc",
+      "task": "edit-login",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 60
+    },
+    {
+      "host": "home-pc",
+      "task": "edit-schema",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 85
+    },
+    {
+      "host": "proxy-out",
+      "task": "write-tests",
+      "kind": "opencode",
+      "status": "idle",
+      "progress": 0
+    }
+  ]
+}

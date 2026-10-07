@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch01-three-screens",
+  "version": "0.1",
+  "name": "三块屏幕，三个 AI",
+  "hosts": [
+    {
+      "id": "laptop",
+      "role": "你的笔记本",
+      "place": "只有一个终端窗口，随时会被你关掉"
+    },
+    {
+      "id": "cloud",
+      "role": "云端主机",
+      "place": "不在你手上，通过网络用"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "install-deps",
+      "project": "机房搭建",
+      "title": "装依赖，屏幕一直在刷",
+      "lines": {
+        "zh": [
+          "开始装依赖，包很多",
+          "已经刷到第 400 行了，还没停",
+          "有个包在重试，可能要一会儿"
+        ]
+      },
+      "question": {
+        "text": "它还在刷，你不想看着这一块屏幕。怎么办？",
+        "options": [
+          {
+            "id": "detach-leave",
+            "label": "离开这一块（Ctrl-b d），让它继续跑"
+          },
+          {
+            "id": "resize-split",
+            "label": "把这块屏幕再切一半，右边接着看别的"
+          },
+          { "id": "kill", "label": "杀掉这个会话，重装一遍" }
+        ]
+      }
+    },
+    {
+      "key": "fix-flaky-test",
+      "project": "老项目",
+      "title": "同一个测试第三次失败",
+      "lines": {
+        "zh": [
+          "跑测试，第三个用例失败了",
+          "重跑一次，还是同一个用例失败",
+          "我把失败输出贴给你，看着像是时间没到就断言了"
+        ]
+      },
+      "question": {
+        "text": "它把问题抛回给你了。这一块屏幕现在归你决定：",
+        "options": [
+          { "id": "add-wait", "label": "让它加等待再重跑" },
+          { "id": "skip-case", "label": "让它先跳过这个用例，别的继续" },
+          { "id": "take-over", "label": "我自己接过来改" },
+          { "id": "kill", "label": "杀掉这个会话，今天不碰它了" }
+        ]
+      }
+    },
+    {
+      "key": "cloud-build",
+      "project": "发布",
+      "title": "云端构建跑完在等结果",
+      "lines": {
+        "zh": [
+          "构建跑完了，产物已经生成",
+          "没有终端可以接上去看，只能抓屏幕文字"
+        ]
+      },
+      "question": {
+        "text": "这里没有真终端，`tmux attach` 报了「not a terminal」。下一步：",
+        "options": [
+          {
+            "id": "capture-pane",
+            "label": "用 capture-pane 把屏幕上的文字抓下来看"
+          },
+          {
+            "id": "send-keys",
+            "label": "用 send-keys 隔着门往里下指令，让它打包上传"
+          },
+          { "id": "kill", "label": "杀掉会话，回到本地重来" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "laptop",
+      "task": "install-deps",
+      "kind": "claude",
+      "status": "working",
+      "progress": 55
+    },
+    {
+      "host": "laptop",
+      "task": "fix-flaky-test",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 72
+    },
+    {
+      "host": "cloud",
+      "task": "cloud-build",
+      "kind": "opencode",
+      "status": "idle",
+      "progress": 100
+    }
+  ]
+}

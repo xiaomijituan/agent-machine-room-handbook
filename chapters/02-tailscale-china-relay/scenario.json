@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch02-two-devices-outdoor",
+  "version": "0.1",
+  "name": "两台设备，一个出门了",
+  "hosts": [
+    {
+      "id": "home-pc",
+      "role": "家里电脑",
+      "place": "常年开机，在家里 Wi-Fi 后面"
+    },
+    {
+      "id": "phone",
+      "role": "手机",
+      "place": "跟着人走，出门就切蜂窝流量"
+    },
+    {
+      "id": "cloud-box",
+      "role": "云端主机",
+      "place": "别人机房里的机器，通过网络用"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "why-so-slow",
+      "project": "排障",
+      "title": "手机连家里电脑，一下要 1.8 秒",
+      "lines": {
+        "zh": [
+          "ping 通了，但每一下 300 毫秒起",
+          "有一下超时到了 1.8 秒",
+          "命令自己也提示了一句 direct connection not established"
+        ]
+      },
+      "question": {
+        "text": "先确认走的是哪条路，还是先假设是运营商的锅？",
+        "options": [
+          {
+            "id": "check-path",
+            "label": "跑 tailscale ping，看输出里写的是 via DERP 还是地址端口"
+          },
+          {
+            "id": "blame-cgnat",
+            "label": "不用查了，肯定是运营商 NAT，直接想办法绕"
+          },
+          { "id": "kill", "label": "先不排了，关掉这个活" }
+        ]
+      }
+    },
+    {
+      "key": "where-to-run",
+      "project": "派活",
+      "title": "一个要跑四十分钟的活，放哪台机器",
+      "lines": {
+        "zh": [
+          "手机现在走蜂窝流量，链路绕境外中继",
+          "家里电脑在同一个 Wi-Fi 里，实测走直连 6 到 14 毫秒",
+          "云端主机一直在线，但从这里连它也要过中继"
+        ]
+      },
+      "question": {
+        "text": "四十分钟的活，你放哪？",
+        "options": [
+          { "id": "use-home-pc", "label": "放家里电脑，网络在它手上不受影响" },
+          { "id": "use-cloud", "label": "放云端主机，回来再看结果" },
+          { "id": "use-phone", "label": "放手机，反正它能后台跑" },
+          { "id": "kill", "label": "别跑了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "need-proxy",
+      "project": "装机",
+      "title": "有人说装这个必须挂代理",
+      "lines": {
+        "zh": [
+          "登录用的三个域名，直连都返回 302，耗时 0.5 秒左右",
+          "走本机代理反而 0.8 秒"
+        ]
+      },
+      "question": {
+        "text": "装之前，先量还是先挂代理？",
+        "options": [
+          {
+            "id": "measure-first",
+            "label": "先直连试一次，记下耗时，再决定要不要挂代理"
+          },
+          { "id": "always-proxy", "label": "直接挂代理装，省事" },
+          { "id": "kill", "label": "不装了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "home-pc",
+      "task": "why-so-slow",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 40
+    },
+    {
+      "host": "phone",
+      "task": "where-to-run",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 30
+    },
+    {
+      "host": "cloud-box",
+      "task": "need-proxy",
+      "kind": "opencode",
+      "status": "idle",
+      "progress": 0
+    }
+  ]
+}

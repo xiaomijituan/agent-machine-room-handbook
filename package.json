@@ -1,0 +1,15 @@
+{
+  "name": "agent-machine-room-handbook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "《agent 机房手册》——中文可运行教程：让几个 AI 一起干活时，你的机器该长什么样",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

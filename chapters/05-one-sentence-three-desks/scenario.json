@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch05-one-sentence-three-desks",
+  "version": "0.1",
+  "name": "三块屏都停着，你只有一句话",
+  "hosts": [
+    {
+      "id": "home-pc",
+      "role": "家里电脑",
+      "place": "三块屏，三种状态：卡住、正在跑、空着"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "stuck-asking",
+      "project": "登录改造",
+      "title": "这块屏卡住了，在等人给方向",
+      "lines": {
+        "zh": [
+          "登录要改成新的写法，但旧的调用点还有 7 处",
+          "我不确定要不要一起改，改错了影响别的模块"
+        ]
+      },
+      "question": {
+        "text": "你手上一句话，先给谁？",
+        "options": [
+          { "id": "answer-this", "label": "先回答这块卡住的，并给出验收标准" },
+          { "id": "give-idle", "label": "给空着那块屏，让它先跑起来" },
+          { "id": "kill", "label": "这块不管了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "busy-running",
+      "project": "构建",
+      "title": "这块屏正在跑，别去打断它",
+      "lines": {
+        "zh": ["正在跑构建，已经到第 6 步", "这时候插新指令会打断当前这一步"]
+      },
+      "question": {
+        "text": "如果非要有话给它，怎么办：",
+        "options": [
+          { "id": "wait", "label": "等它跑完这一段再说" },
+          { "id": "interrupt", "label": "打断它，现在就改方向" },
+          { "id": "kill", "label": "直接关掉这一块" }
+        ]
+      }
+    },
+    {
+      "key": "idle-desk",
+      "project": "测试",
+      "title": "这块屏空着，能接活",
+      "lines": {
+        "zh": ["空闲着，等一句话任务", "上一件活做完了，现在没人给它方向"]
+      },
+      "question": {
+        "text": "派活这句话怎么写：",
+        "options": [
+          { "id": "one-job", "label": "一句只放一件活，并且写清怎么算做完" },
+          { "id": "two-jobs", "label": "一句里放两件活，省得再说一次" },
+          { "id": "kill", "label": "不派了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "home-pc",
+      "task": "stuck-asking",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 45
+    },
+    {
+      "host": "home-pc",
+      "task": "busy-running",
+      "kind": "codex",
+      "status": "working",
+      "progress": 55
+    },
+    {
+      "host": "home-pc",
+      "task": "idle-desk",
+      "kind": "grok",
+      "status": "idle",
+      "progress": 0
+    }
+  ]
+}
