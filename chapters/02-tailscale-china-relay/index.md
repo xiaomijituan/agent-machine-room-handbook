@@ -1,5 +1,7 @@
 # 第 2 章 · 出门就连不上：国内用 Tailscale 真正卡在哪
 
+> © 2026 xiaomijituan · 正文 CC BY 4.0，代码与数据 MIT · 原仓库 https://github.com/xiaomijituan/agent-machine-room-handbook
+
 **先给一句能动手的话**：装完 Tailscale，先跑 `tailscale netcheck`，它告诉你这台机器离各个中继站分别有多远。这一章的所有判断都从这条命令出发。
 
 这章讲的是一个具体麻烦：你在家连得好好的，人一出门口，手机上的连接就变卡、变得时好时坏。

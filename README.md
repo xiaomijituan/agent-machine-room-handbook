@@ -54,7 +54,14 @@ npm run format       # 格式化
 
 ## 许可
 
-待定。这一章写清楚之前不发出去。
+分两层，因为"代码被复制"和"文章被搬运"是两件事：
+
+- **正文**（各章 `index.md`、`verify.md`、`china.md`，README、STYLE、GLOSSARY、AGENTS）——**CC BY 4.0**，见 [LICENSE-docs.md](./LICENSE-docs.md)。署名方式与"不得暗示背书"在那份文件里指定了。
+- **代码与数据**（`scripts/`、`tools/`、各章 `scenario.json`、`reference.jsonl`）——**MIT**，见 [LICENSE](./LICENSE)。
+
+**每章开头那一行署名是硬要求**，`npm run check` 会查它在不在。原因很实际：MIT 的署名要求只在"跟着文件走"时才有效，而整章被复制到别处时不会带上 LICENSE 文件——署名必须长在正文里。
+
+**一句实话**：CC BY 4.0 允许别人商用，所以这些文字可以被别人免费转发到他的网站，本仓库接受这个后果。付费版本的价值在于成体系的编排、可玩的剧本、练习和维护，不在于禁止转发。
 
 ## 一句提醒
 

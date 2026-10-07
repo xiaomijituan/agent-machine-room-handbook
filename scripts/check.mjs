@@ -110,6 +110,22 @@ for (const chapter of chapters) {
     if (!existsSync(join(dir, name))) fail(label, "缺文件 " + name);
   }
 
+  // 三b、署名必须长在正文里。
+  // MIT/CC 的署名要求在"整章被复制到别的平台"时不会自动跟过去——
+  // 别人不会顺手带上 LICENSE 文件。所以署名写在开头，并由门禁保证它没被删。
+  if (existsSync(join(dir, "index.md"))) {
+    const head = readFileSync(join(dir, "index.md"), "utf8")
+      .split(/\r?\n/)
+      .slice(0, 6)
+      .join("\n");
+    if (!head.includes("CC BY 4.0") || !head.includes("xiaomijituan")) {
+      fail(
+        label + "/index.md",
+        "开头 6 行内缺署名行（要含 CC BY 4.0 与作者名）",
+      );
+    }
+  }
+
   // 四、剧本结构
   let scenario = null;
   if (existsSync(join(dir, "scenario.json"))) {

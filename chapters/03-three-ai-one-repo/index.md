@@ -1,5 +1,7 @@
 # 第 3 章 · 三个 AI 同时干一个活，会出什么乱子
 
+> © 2026 xiaomijituan · 正文 CC BY 4.0，代码与数据 MIT · 原仓库 https://github.com/xiaomijituan/agent-machine-room-handbook
+
 **先给一句能动手的话**：让三个 AI 同时动同一个仓库之前，先规定一件事——**一个文件同一时刻只归一个 AI 改**。这一章讲为什么这条规矩值得占一句话。
 
 这章只负责让你看见坑，不负责教你填坑（填坑在第 5 章）。

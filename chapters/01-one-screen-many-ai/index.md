@@ -1,5 +1,7 @@
 # 第 1 章 · 一个屏幕开好几块，各跑各的
 
+> © 2026 xiaomijituan · 正文 CC BY 4.0，代码与数据 MIT · 原仓库 https://github.com/xiaomijituan/agent-machine-room-handbook
+
 这一章教你一件事：**把活放进 tmux 之后，你关掉终端窗口，活还在干。**
 
 下面所有命令和输出都是真跑出来的，不是抄文档。跑在一台 Ubuntu 22.04 的云端沙箱上，tmux 版本 3.2a。每一次真实输出后面都注明了能在哪找到原始记录。
