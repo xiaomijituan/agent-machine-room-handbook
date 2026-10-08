@@ -1,0 +1,7 @@
+# 复制进来的第三方文件：保持原样，格式化工具不许碰
+# 这些文件有校验和要核对（见 vendor/README.md），一旦被重新格式化就对不上了。
+vendor/
+
+# 产物与依赖
+node_modules/
+.changeset/

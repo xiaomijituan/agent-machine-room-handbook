@@ -30,16 +30,25 @@
 
 ## 怎么玩剧本
 
-下载模拟器的打包文件，打开里面的页面，进"剧本库"，把该章 `scenario.json` 的内容粘进去，导入。
+每一条能动手的内容都配了一份剧本（该章的 `scenario.json`）。玩它有两种方式，走的是同一套校验：
 
-模拟器叫 fusion（聚变），仓库在 <https://github.com/xiaomijituan/fusion>。
+```bash
+npm install --registry=https://registry.npmmirror.com
+npm run serve:site     # 起一个只监听 127.0.0.1 的本地页面
+```
+
+打开 <http://127.0.0.1:5280/site/>，选一章进去，页面会把这一章的剧本交给嵌在下面的模拟器，机房随之变成剧本里描述的样子。这个方式不用联网：仓库的 `vendor/` 里就放着模拟器的一份复制件（fusion 的 `v0.1.1`，来历和校验和写在 `vendor/README.md`）。
+
+另一种方式是手工粘贴：自己打开模拟器，进「剧本库」，把该章 `scenario.json` 的全文粘进输入框，按「导入」。
+
+模拟器本身叫 fusion（聚变），仓库在 <https://github.com/xiaomijituan/fusion>。
 
 ## 本地检查
 
 ```bash
 npm install --registry=https://registry.npmmirror.com
-npm run check        # 结构、剧本字段、记录文件、相对链接、验证记录完整性
-npm run format       # 格式化
+npm run check        # 结构、剧本字段、记录文件、相对链接、验证记录完整性、复制件与页面是否对得上
+npm run format       # 格式化（vendor/ 里的第三方复制件不参与格式化）
 ```
 
 ## 这个仓库的三条硬规矩

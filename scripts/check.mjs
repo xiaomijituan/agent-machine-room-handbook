@@ -325,6 +325,89 @@ for (const chapter of chapters) {
   }
 }
 
+// 七、vendor/ 与 site/：复制进来的模拟器和用它拼起来的试玩页必须对得上
+const vendorDir = join(root, "vendor");
+const vendorFiles = existsSync(vendorDir)
+  ? readdirSync(vendorDir).filter((name) =>
+      /^fusion-sim-\d+\.\d+\.\d+\.html$/.test(name),
+    )
+  : [];
+if (vendorFiles.length === 0) {
+  fail(
+    "vendor/",
+    "没有形如 fusion-sim-<版本号>.html 的复制件（见 vendor/README.md 的下载与升级说明）",
+  );
+}
+if (vendorFiles.length > 1) {
+  fail(
+    "vendor/",
+    "同时存在两份模拟器复制件：" +
+      vendorFiles.join("、") +
+      "，升级时应删掉旧的",
+  );
+}
+if (vendorFiles.length === 1) {
+  const pinned = vendorFiles[0];
+  const version = pinned.match(/\d+\.\d+\.\d+/)[0];
+  const sim = readFileSync(join(vendorDir, pinned), "utf8");
+  if (!sim.includes("fusion:load-scenario")) {
+    fail(
+      "vendor/" + pinned,
+      "这份复制件里没有注入端点的消息类型，说明它来自还不含该端点的旧版本",
+    );
+  }
+  for (const external of ['src="http', "src='http", "url(http", 'url("http']) {
+    if (sim.includes(external))
+      fail("vendor/" + pinned, "自包含文件里出现了外部资源引用：" + external);
+  }
+  const vendorReadme = join(vendorDir, "README.md");
+  if (!existsSync(vendorReadme)) {
+    fail(
+      "vendor/README.md",
+      "缺这份说明：来历、版本、大小、校验和、升级步骤都要写在这里",
+    );
+  } else {
+    const text = readFileSync(vendorReadme, "utf8");
+    if (!text.includes(pinned))
+      fail("vendor/README.md", "没提到当前这份文件的名称 " + pinned);
+    // 下载地址里的 tag 可以带 v 前缀，也可以不带；两种写法都算对。
+    if (
+      !new RegExp("releases/download/v?" + version.replace(/\./g, "\\.")).test(
+        text,
+      )
+    )
+      fail(
+        "vendor/README.md",
+        "下载来源里没写版本号 " + version + "，无法核对这份文件是从哪来的",
+      );
+  }
+  const chapterPage = join(root, "site", "chapter.html");
+  if (!existsSync(chapterPage)) {
+    fail(
+      "site/chapter.html",
+      "缺这个页面，vendor 里的模拟器就没有地方被嵌起来",
+    );
+  } else {
+    const page = readFileSync(chapterPage, "utf8");
+    for (const other of page.match(/fusion-sim-\d+\.\d+\.\d+\.html/g) || []) {
+      if (other !== pinned)
+        fail(
+          "site/chapter.html",
+          "页面引用的是 " +
+            other +
+            "，而 vendor 里那份是 " +
+            pinned +
+            "，升级时漏改了一处",
+        );
+    }
+    if (!page.includes(pinned))
+      fail(
+        "site/chapter.html",
+        "页面里没有引用 " + pinned + "，iframe 指向了别处",
+      );
+  }
+}
+
 if (problems.length) {
   console.error("检查未通过，共 " + problems.length + " 条：\n");
   for (const problem of problems) console.error("  FAIL " + problem);

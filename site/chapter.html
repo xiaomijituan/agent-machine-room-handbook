@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>章节试玩 · agent 机房手册</title>
+    <style>
+      :root {
+        --bg: #0d0f14;
+        --fg: #e8ecf3;
+        --muted: #97a1b3;
+        --line: #242a36;
+        --ok: #4ade80;
+        --bad: #f87171;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          14px/1.6 system-ui,
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: baseline;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+      a {
+        color: #7dd3fc;
+      }
+      #status {
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+      }
+      #status.ok {
+        color: var(--ok);
+      }
+      #status.bad {
+        color: var(--bad);
+      }
+      button {
+        min-height: 36px;
+        padding: 0 12px;
+        background: #1c2330;
+        color: var(--fg);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        cursor: pointer;
+        font: inherit;
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: calc(100vh - 190px);
+        min-height: 480px;
+        border: 0;
+        background: #000;
+      }
+      details {
+        padding: 10px 16px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+      }
+      pre {
+        max-height: 260px;
+        overflow: auto;
+        background: #11141a;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 id="title">章节试玩</h1>
+      <button id="retry" type="button">重新注入这一章的剧本</button>
+      <a id="back" href="./index.html">← 换一章</a>
+    </header>
+    <div id="status">正在准备模拟器……</div>
+    <iframe
+      id="sim"
+      title="聚变模拟器"
+      src="../vendor/fusion-sim-0.1.1.html"
+    ></iframe>
+    <details>
+      <summary>注入失败怎么办（手工粘贴的退路，附本章剧本原文）</summary>
+      <p>
+        在这个页面里：先按
+        <kbd>Esc</kbd>
+        回到机房外层，进入「剧本库」，把下面这段文本粘贴进输入框，再按「导入」。
+        这条路和本页用的注入走的是同一套校验。
+      </p>
+      <pre id="raw"></pre>
+    </details>
+    <script>
+      (function () {
+        var INJECT = "fusion:load-scenario";
+        var RESULT = INJECT + "-result";
+        var status = document.getElementById("status");
+        var frame = document.getElementById("sim");
+        var params = new URLSearchParams(location.search);
+        var chapter = params.get("chapter") || "";
+        var scenarioText = null;
+        var timer = null;
+
+        function say(kind, lines) {
+          var arr = Array.isArray(lines) ? lines : [String(lines)];
+          status.textContent = arr.join("\n");
+          status.className = kind;
+        }
+
+        function write(node, text) {
+          node.textContent = text;
+        }
+
+        function send() {
+          if (scenarioText === null) return;
+          frame.contentWindow.postMessage(
+            { type: INJECT, scenario: scenarioText },
+            window.location.origin,
+          );
+        }
+
+        // The simulator installs its message listener while React is mounting, so a message sent
+        // too early disappears without an answer. Retry until the pinned build replies, and give
+        // up after 20 seconds instead of posting forever.
+        var attempts = 0;
+        function keepTrying() {
+          if (scenarioText === null) return;
+          send();
+          if (++attempts > 40) {
+            clearTimeout(timer);
+            say(
+              "bad",
+              "把剧本递给模拟器之后没有等到回话（重试了 20 秒）。请展开页面下方“注入失败怎么办”，改用手工粘贴。",
+            );
+          }
+        }
+
+        window.addEventListener("message", function (event) {
+          var data = event.data;
+          if (event.origin !== window.location.origin) return;
+          if (!data || data.type !== RESULT) return;
+          clearTimeout(timer);
+          if (data.ok) {
+            var warnings = data.warnings || [];
+            say(
+              "ok",
+              [
+                "剧本已装入：" + chapter + "。机房现在跑的是本章的格子。",
+              ].concat(warnings.length ? ["提醒：", warnings.join("\n")] : []),
+            );
+          } else {
+            say(
+              "bad",
+              ["本章剧本没有通过校验（下面这段来自模拟器本身）："].concat(
+                data.errors || [],
+              ),
+            );
+          }
+        });
+
+        function start() {
+          if (
+            !chapter ||
+            chapter.indexOf("/") !== -1 ||
+            chapter.indexOf("..") !== -1
+          ) {
+            say(
+              "bad",
+              "地址里缺少 chapter 参数，或者它看起来不像一个目录名。\n用法：chapter.html?chapter=01-one-screen-many-ai",
+            );
+            return;
+          }
+          write(document.getElementById("title"), "章节试玩：" + chapter);
+          fetch(
+            "../chapters/" + encodeURIComponent(chapter) + "/scenario.json",
+            { cache: "no-store" },
+          )
+            .then(function (response) {
+              if (!response.ok) throw new Error("HTTP " + response.status);
+              return response.text();
+            })
+            .then(function (text) {
+              scenarioText = text;
+              write(document.getElementById("raw"), text);
+              say("", "模拟器正在加载，加载完成后会把本章的剧本递进去……");
+              timer = setInterval(keepTrying, 500);
+              keepTrying();
+            })
+            .catch(function (error) {
+              say(
+                "bad",
+                "读不到本章的 scenario.json：" +
+                  error.message +
+                  "\n这一章可能还没有剧本文件，或者目录名写错了。",
+              );
+            });
+        }
+
+        frame.addEventListener("load", function () {
+          send();
+        });
+        document.getElementById("retry").addEventListener("click", function () {
+          if (scenarioText === null) {
+            start();
+            return;
+          }
+          say("", "重新注入中……");
+          clearTimeout(timer);
+          timer = setInterval(keepTrying, 500);
+          keepTrying();
+        });
+        start();
+      })();
+    </script>
+  </body>
+</html>
