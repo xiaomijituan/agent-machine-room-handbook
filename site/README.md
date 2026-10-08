@@ -21,7 +21,7 @@ node site/serve.mjs 8000    # 想换端口就带上端口号
 `site/chapter.html` 做三件事：
 
 1. 从地址栏的 `?chapter=` 参数里取章节目录名，去读 `chapters/<章节目录名>/scenario.json`。
-2. 用 iframe 装载 `vendor/fusion-sim-0.1.1.html`，然后用 `postMessage` 把剧本原文交给它。消息格式由 fusion 定义（见它的 ADR-0008）：
+2. 用 iframe 装载 `vendor/fusion-sim-0.1.2.html`，然后用 `postMessage` 把本章的剧本原文交给这个被装载的模拟器页面。消息格式由 fusion 定义（见 fusion 的 ADR-0008）：
 
    ```jsonc
    // 章节页 → 模拟器（只允许这两个字段）

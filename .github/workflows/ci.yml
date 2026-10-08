@@ -31,11 +31,12 @@ jobs:
 
       # 剧本格式与事件流格式的权威校验在 fusion 发布的两个单文件里。本仓库不复制 fusion 的
       # 源码，也不自己抄一份规则（fusion 仓 ADR-0001），只在 CI 里按写死的版本下载来跑。
+      # 版本要和 vendor/ 里那份模拟器复制件一致（vendor/README.md 的升级步骤第 5 条）。
       # 退出码的约定来自 fusion 的 ADR-0008：1 表示投稿内容不合格，2 表示这一步自己没有跑成
       # （下载失败、文件是空的），两种情况的提示文字必须不同，排查时才知道该找谁。
       - name: 用 fusion 发布的产物做权威校验
         env:
-          FUSION_TAG: v0.1.1
+          FUSION_TAG: v0.1.2
         run: |
           set -u
           mkdir -p .fusion-tools

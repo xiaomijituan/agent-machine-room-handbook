@@ -1,12 +1,13 @@
 // 本仓库的自检。不依赖任何外部包，只用 node 自带模块。
 //
-// 它查七件事：有没有把真实身份信息写进正文、相对链接有没有断、章节五件套齐不齐、
+// 它查八件事：有没有把真实身份信息写进正文、相对链接有没有断、章节五件套齐不齐、
 // 开头有没有署名行、剧本文件能不能解析、记录文件的事件行合法且与同一章的剧本对得上、
-// 验证记录缺不缺字段，外加 vendor/ 的复制件和 site/ 页面的引用对不对得上。
+// 验证记录缺不缺字段，以及 vendor/ 的复制件、site/ 页面的引用、ci.yml 里写死的
+// FUSION_TAG 这三处是不是同一个版本。
 //
 // 注意：剧本字段和事件流格式的权威校验不在这里，在 fusion 发布的
 // scenario-check.mjs 与 review-cli.mjs 里，CI 会按写死的版本下载来跑
-// （见 .github/workflows/ci.yml）。本脚本只查上面这五件事，别把它当门禁的全部。
+// （见 .github/workflows/ci.yml）。本脚本只查上面那八件事，别把它当门禁的全部。
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 
@@ -324,6 +325,30 @@ if (vendorFiles.length === 1) {
         "页面里没有引用 " + pinned + "，iframe 指向了别处",
       );
   }
+  // CI 下载的那两个命令行工具（FUSION_TAG）和 vendor 里这份模拟器必须来自同一次发布。
+  // 两者分家意味着读者点着的和被判合格与否的是两套东西，而这种分家通常是升级时漏改一处。
+  const ciPath = join(root, ".github", "workflows", "ci.yml");
+  if (existsSync(ciPath)) {
+    const ci = readFileSync(ciPath, "utf8");
+    const pinnedTag = (ci.match(/FUSION_TAG:\s*v?(\d+\.\d+\.\d+)/) || [])[1];
+    if (!pinnedTag) {
+      fail(
+        ".github/workflows/ci.yml",
+        "没找到写死的 FUSION_TAG，无法和 vendor 里那份 " + pinned + " 对版本",
+      );
+    } else if (pinnedTag !== version) {
+      fail(
+        ".github/workflows/ci.yml",
+        "FUSION_TAG 是 v" +
+          pinnedTag +
+          "，而 vendor 里那份模拟器是 v" +
+          version +
+          "（" +
+          pinned +
+          "）。升级时两处要一起改，见 vendor/README.md 的升级步骤",
+      );
+    }
+  }
 }
 
 if (problems.length) {
@@ -339,7 +364,7 @@ console.log(
     mdFiles.length +
     " 个 Markdown 文件。本脚本查的是：五件套齐不齐、开头有没有署名行、相对链接断没断、" +
     "记录文件的事件行合法且与同一章的剧本对得上、验证记录缺不缺项、身份信息有没有按规矩掩码、" +
-    "复制件与页面引用是否一致。",
+    "复制件 / 页面引用 / ci.yml 的 FUSION_TAG 这三处是不是同一个版本。",
 );
 console.log(
   "剧本字段与事件流格式的权威校验不在这里，在 fusion 发布的 scenario-check.mjs 与 " +
