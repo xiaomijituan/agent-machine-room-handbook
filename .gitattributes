@@ -1,0 +1,7 @@
+# 复制进来的第三方产物：字节必须和发布页上那份一模一样（vendor/README.md 记了大小与校验和）。
+# 关掉换行符转换，否则在 core.autocrlf=true 的机器上 checkout 出来的文件对不上校验和。
+vendor/fusion-sim-*.html -text
+
+# 每一章的基准记录是证据文件，按原样保存，不参与换行符改写
+chapters/*/reference.jsonl -text
+chapters/*/evidence/** -text
