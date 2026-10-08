@@ -11,7 +11,15 @@
 下载地址（下载时得到的字节数与上表一致，MD5 也与本地文件一致）：
 <https://github.com/xiaomijituan/fusion/releases/download/v0.1.1/fusion-sim-0.1.1.html>
 
-这个文件是聚变模拟器的**自包含 HTML**：所有 JavaScript 和样式都写在文件内部，双击就能运行，不需要网络，也不需要安装任何东西。文件自身的第 1 到 3 行写着它的出身（`fusion v0.1.1`、构建时间、来源提交 `fe04a89`），这三个信息可以和 fusion 的 tag `v0.1.1` 对照。
+这个文件是聚变模拟器的**自包含 HTML**：所有 JavaScript 和样式都写在文件内部，双击就能运行，不需要网络，也不需要安装任何东西。
+
+**这份 HTML 里没有出身注释**——文件第 1 到 3 行就是 `<!doctype html>`、`<html lang="zh">`、`<head>`。fusion 只在两个命令行产物（`scenario-check.mjs`、`review-cli.mjs`）的头两行写出身（`// fusion v<ver> … built <时间> from <提交>`），模拟器这份没有。那句话说错了，是这份文档自己的锅，不是 fusion 的（fusion 的 ADR-0008 在 0.1.2 里已把这条改正）。
+
+能核对这份文件的有三个办法，前两个不用联网：
+
+1. 下载地址里的 tag 名和文件名里的版本号要一致（`…/releases/download/v0.1.1/fusion-sim-0.1.1.html`）。
+2. 文件内部的版本号只出现一次，是打包进 JS 的那个常量：`grep -o '0\.1\.1' vendor/fusion-sim-0.1.1.html | wc -l` 得到 1，命中在 `` var Po=`0.1.1` `` 这一处。
+3. 字节数和 MD5 要和上表一致；这一条防的是"下载中途被改动或截断"，前两条防的是"拿错版本"。
 
 ## 为什么复制一份，而不是链接过去的站点
 
