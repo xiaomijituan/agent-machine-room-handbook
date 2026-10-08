@@ -2,6 +2,9 @@
 # 这些文件有校验和要核对（见 vendor/README.md），一旦被重新格式化就对不上了。
 vendor/
 
+# CI 那一步从 fusion 发布页下载的临时副本，同理不改写（本地手动跑那一步时也会落在这里）
+.fusion-tools/
+
 # 产物与依赖
 node_modules/
 .changeset/

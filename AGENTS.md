@@ -19,13 +19,19 @@ npm run format       # 格式化；钩子只检查不改写
 
 - pre-commit：`npm run check` + `npx prettier --check .`
 
-CI（`.github/workflows/ci.yml` 里那个叫 `gates` 的作业）：`npm ci` → `format:check` → `check`。
+CI（`.github/workflows/ci.yml` 里那个叫 `gates` 的作业）的顺序是：`npm ci` → `format:check` →
+`check` → 用 fusion 发布的两个产物做权威校验。最后一步按写死的版本（现在是 `v0.1.1`）下载
+`scenario-check.mjs` 与 `review-cli.mjs`，逐章跑一遍；下载失败按退出码 2 报"环境问题"，
+剧本或记录文件不合格按退出码 1 报"内容不合格"，两种提示不一样。
 
 服务端（GitHub 分支保护，本地绕不过）：改 `main` 必须走 PR、`gates` 必须绿、
 禁止 force push 与删除 `main`。管理员豁免（单人节奏，所以你自己直推仍能过）。
 
-**别把门禁当摆设**：`scripts/check.mjs` 每次加规则都要用临时坏文件证明它会红，
-再删掉那个坏文件。现有两条已这样验过。
+**别把门禁当摆设**：每加一条规则，都要用一个临时造出来的坏文件证明它会红，再把那个坏文件删掉。
+现在已这样验过的有：`check.mjs` 里的记录文件、身份掩码、vendor 那几条（把页面里的复制件版本号
+改掉、把复制件从 `vendor/` 移走，都会红），以及 `ci.yml` 里 fusion 产物那一步——临时加一章
+写着非法剧本和坏记录文件，那一步按退出码 1 报出这两章各自的问题；断网下载失败时按退出码 2 报
+"环境问题"。
 
 ## 一章 = 五个文件
 
@@ -51,8 +57,9 @@ chapters/NN-slug/
   `check.mjs` 里那两条掩码检查不需要知道真实名字，所以真实名字也不会溜进脚本。
 - **不 import、也不复制 fusion 的源码**（fusion 仓 ADR-0001）。能依赖的只有它发布的产物。
   剧本格式的权威校验是那份 `scenario-check.mjs`，事件流投影是 `review-cli.mjs`，两个都在
-  fusion 的 `v0.1.1` 发布页上；`ci.yml` 里注释好的那一步随时可以启用，启用时按
-  `vendor/README.md` 的升级步骤把版本号写死。
+  fusion 的 `v0.1.1` 发布页上；`ci.yml` 里"用 fusion 发布的产物做权威校验"那一步已经启用，
+  按写死的 `FUSION_TAG` 下载来跑。fusion 发新版时按 `vendor/README.md` 的升级步骤改这个变量，
+  不要在本仓库的脚本里另抄一份校验规则。
 - **`vendor/` 里是复制进来的第三方文件，格式化工具不许碰。** 它们有大小和校验和要核对，
   被改写一次就对不上了。这件事已经用 `.prettierignore` 挡住，`check.mjs` 的第七条会核对
   页面引用的文件名与 `vendor/` 里实际存在的那份一致（两条反向测试都会红：改掉页面里的版本、

@@ -29,11 +29,54 @@ jobs:
       - name: 内容自检（五件套 / 剧本字段 / 记录文件 / 链接 / 验证记录 / 身份掩码）
         run: npm run check
 
-      # 下面这一步等 fusion 打出 v0.1.0、随版本附上 scenario-check.mjs 之后再启用。
-      # 剧本格式的权威校验在那份发版产物里，本仓库不复制 fusion 的源码（ADR-0001）。
-      #
-      # - name: 剧本格式校验（fusion 发版产物）
-      #   run: |
-      #     curl -sfL -o scenario-check.mjs \
-      #       https://github.com/xiaomijituan/fusion/releases/download/v0.1.0/scenario-check.mjs
-      #     for f in chapters/*/scenario.json; do node scenario-check.mjs "$f" --strict; done
+      # 剧本格式与事件流格式的权威校验在 fusion 发布的两个单文件里。本仓库不复制 fusion 的
+      # 源码，也不自己抄一份规则（fusion 仓 ADR-0001），只在 CI 里按写死的版本下载来跑。
+      # 退出码的约定来自 fusion 的 ADR-0008：1 表示投稿内容不合格，2 表示这一步自己没有跑成
+      # （下载失败、文件是空的），两种情况的提示文字必须不同，排查时才知道该找谁。
+      - name: 用 fusion 发布的产物做权威校验
+        env:
+          FUSION_TAG: v0.1.1
+        run: |
+          set -u
+          mkdir -p .fusion-tools
+          for tool in scenario-check.mjs review-cli.mjs; do
+            if ! curl -sSL --max-time 60 --retry 2 -o ".fusion-tools/$tool" \
+                 "https://github.com/xiaomijituan/fusion/releases/download/$FUSION_TAG/$tool"; then
+              echo "下载 $tool 失败。这是环境问题（按约定退出码 2），不是哪一章写坏了。"
+              exit 2
+            fi
+            if [ ! -s ".fusion-tools/$tool" ]; then
+              echo "下载到的 $tool 是空文件。这是环境问题（退出码 2）。"
+              exit 2
+            fi
+          done
+
+          problems=0
+          for chapter in chapters/*/; do
+            if [ -f "${chapter}scenario.json" ]; then
+              if ! node .fusion-tools/scenario-check.mjs "${chapter}scenario.json" --strict; then
+                echo "↑ 这一章的剧本没通过 fusion 的校验：${chapter}"
+                problems=1
+              fi
+            fi
+            if [ -f "${chapter}reference.jsonl" ]; then
+              if ! table=$(node .fusion-tools/review-cli.mjs "${chapter}reference.jsonl"); then
+                echo "这一章的 reference.jsonl 不是合法的事件流：${chapter}"
+                problems=1
+              else
+                rows=$(printf '%s\n' "$table" | grep -c '^| [0-9]' || true)
+                if [ "${rows:-0}" -lt 1 ]; then
+                  echo "这一章的记录文件里排不出任何一行决策记录：${chapter}"
+                  problems=1
+                else
+                  echo "${chapter} 排出 ${rows} 行决策记录"
+                fi
+              fi
+            fi
+          done
+
+          if [ "$problems" -ne 0 ]; then
+            echo "上面这些是内容问题（退出码 1），要改的是那一章，不是环境。"
+            exit 1
+          fi
+          echo "全部章节都经过了 fusion 产物的校验。"

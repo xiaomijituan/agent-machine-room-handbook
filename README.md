@@ -47,9 +47,13 @@ npm run serve:site     # 起一个只监听 127.0.0.1 的本地页面
 
 ```bash
 npm install --registry=https://registry.npmmirror.com
-npm run check        # 结构、剧本字段、记录文件、相对链接、验证记录完整性、复制件与页面是否对得上
+npm run check        # 五件套、署名行、相对链接、记录文件的事件行合法且与同一章的剧本对得上、验证记录完整性、身份掩码、复制件与页面是否对得上
 npm run format       # 格式化（vendor/ 里的第三方复制件不参与格式化）
 ```
+
+`npm run check` 不需要联网。剧本字段和事件流格式的权威校验不在这里，在 fusion 发布的
+`scenario-check.mjs` 与 `review-cli.mjs` 里，CI 会按写死的版本下载来逐章跑一遍
+（见 [.github/workflows/ci.yml](./.github/workflows/ci.yml)）；这一步要联网，所以放在 CI 而不是本地钩子里。
 
 ## 这个仓库的三条硬规矩
 

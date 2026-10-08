@@ -1,11 +1,12 @@
 // 本仓库的自检。不依赖任何外部包，只用 node 自带模块。
 //
-// 它查六件事：章节文件齐不齐、剧本字段合不合法、记录文件能不能解析、
-// 相对链接有没有断、验证记录缺不缺字段、有没有把真实身份信息写进正文。
+// 它查七件事：有没有把真实身份信息写进正文、相对链接有没有断、章节五件套齐不齐、
+// 开头有没有署名行、剧本文件能不能解析、记录文件的事件行合法且与同一章的剧本对得上、
+// 验证记录缺不缺字段，外加 vendor/ 的复制件和 site/ 页面的引用对不对得上。
 //
-// 注意：剧本格式的权威校验在 fusion 的发版产物 scenario-check.mjs 里。
-// 那份产物要等 fusion 打出 v0.1.0 才存在。在那之前本脚本只做结构自检，
-// 不等于规范校验 —— 别把它当门禁的全部。
+// 注意：剧本字段和事件流格式的权威校验不在这里，在 fusion 发布的
+// scenario-check.mjs 与 review-cli.mjs 里，CI 会按写死的版本下载来跑
+// （见 .github/workflows/ci.yml）。本脚本只查上面这五件事，别把它当门禁的全部。
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 
@@ -126,7 +127,7 @@ for (const chapter of chapters) {
     }
   }
 
-  // 四、剧本结构
+  // 四、剧本文件要能解析；字段合不合法由 fusion 的产物在 CI 里判，下面两条跨文件检查要用到解析结果
   let scenario = null;
   if (existsSync(join(dir, "scenario.json"))) {
     try {
@@ -134,94 +135,10 @@ for (const chapter of chapters) {
     } catch (error) {
       fail(label, "scenario.json 不是合法 JSON：" + error.message);
     }
-    if (scenario) {
-      const allowedTop = [
-        "schemaVersion",
-        "id",
-        "version",
-        "name",
-        "hosts",
-        "tasks",
-        "panes",
-      ];
-      for (const key of Object.keys(scenario)) {
-        if (!allowedTop.includes(key))
-          fail(label + "/scenario.json", "规范里没有的顶层字段：" + key);
-      }
-      if (!Number.isInteger(scenario.schemaVersion))
-        fail(label + "/scenario.json", "schemaVersion 必须是整数");
-      for (const key of ["id", "version", "name"]) {
-        if (typeof scenario[key] !== "string" || !scenario[key].trim())
-          fail(label + "/scenario.json", key + " 必须是非空字符串");
-      }
-      const hostIds = new Set((scenario.hosts || []).map((h) => h.id));
-      if (hostIds.size !== (scenario.hosts || []).length)
-        fail(label + "/scenario.json", "hosts 里有重复 id");
-      if (!scenario.hosts || scenario.hosts.length < 1)
-        fail(label + "/scenario.json", "hosts 至少要一个");
-      const taskKeys = new Set((scenario.tasks || []).map((t) => t.key));
-      if (taskKeys.size !== (scenario.tasks || []).length)
-        fail(label + "/scenario.json", "tasks 里有重复 key");
-      for (const task of scenario.tasks || []) {
-        const lines = task.lines && task.lines.zh;
-        if (!Array.isArray(lines) || lines.length < 2) {
-          fail(
-            label + "/scenario.json",
-            "任务 " + task.key + " 的 lines.zh 至少要有两行",
-          );
-        }
-        // 规范允许文本写成字符串，也允许写成 { zh, en }；en 可缺省
-        const qText = task.question && task.question.text;
-        const filled = (value) =>
-          typeof value === "string" && value.trim().length > 0;
-        if (!qText || (!filled(qText) && !filled(qText.zh))) {
-          fail(
-            label + "/scenario.json",
-            "任务 " + task.key + " 缺 question.text（字符串或 { zh } 都行）",
-          );
-        }
-        const options = task.question && task.question.options;
-        if (
-          !Array.isArray(options) ||
-          options.length < 1 ||
-          options.length > 6
-        ) {
-          fail(
-            label + "/scenario.json",
-            "任务 " + task.key + " 的选项数必须是 1 到 6",
-          );
-        } else if (new Set(options.map((o) => o.id)).size !== options.length) {
-          fail(
-            label + "/scenario.json",
-            "任务 " + task.key + " 的选项 id 有重复",
-          );
-        }
-      }
-      for (const pane of scenario.panes || []) {
-        if (!hostIds.has(pane.host))
-          fail(
-            label + "/scenario.json",
-            "pane 引用了不存在的主机：" + pane.host,
-          );
-        if (!taskKeys.has(pane.task))
-          fail(
-            label + "/scenario.json",
-            "pane 引用了不存在的任务：" + pane.task,
-          );
-        if (pane.status && !KNOWN_STATUS.includes(pane.status)) {
-          fail(label + "/scenario.json", "pane 状态不合法：" + pane.status);
-        }
-        if (
-          typeof pane.progress === "number" &&
-          (pane.progress < 0 || pane.progress > 100)
-        ) {
-          fail(
-            label + "/scenario.json",
-            "pane progress 必须在 0 到 100：" + pane.progress,
-          );
-        }
-      }
-    }
+    // 剧本字段的权威校验在 fusion 发布的 scenario-check.mjs 里，CI 会把它下载下来逐章跑
+    // （见 .github/workflows/ci.yml）。本脚本以前也抄了一份规则，那份副本不会跟着 fusion
+    // 改，正是 fusion 仓 ADR-0001 要避免的事，所以删掉了。这里只保留上面那次 JSON 解析，
+    // 下面那两条跨文件的一致性检查要用到解析结果。
   }
 
   // 五、记录文件
@@ -242,10 +159,9 @@ for (const chapter of chapters) {
         );
       }
       if (header) {
-        if (!Number.isInteger(header.schemaVersion))
-          fail(label + "/reference.jsonl", "header 缺整数 schemaVersion");
-        if (typeof header.seed !== "number")
-          fail(label + "/reference.jsonl", "header 缺随机种子 seed");
+        // 「这是不是一份合法的事件流」由 fusion 的 review-cli.mjs 判断（它会检查 header 的
+        // schemaVersion 与五个身份字段），本脚本不再抄一遍。下面这三条是只有本仓库才知道的
+        // 事情：记录要能自己讲清楚自己，还要和同一章的剧本对得上。
         if (!header.snapshot || !Array.isArray(header.snapshot.panes)) {
           fail(
             label + "/reference.jsonl",
@@ -272,6 +188,8 @@ for (const chapter of chapters) {
             fail(label + "/reference.jsonl", "snapshot 的面板编号与剧本不一致");
         }
       }
+      // 事件行的词表：review-cli.mjs 只要求每行有 type，不看 type 取什么值，也不看 seq 递不递增。
+      // 一份能投影的记录和一份能跟着读者对拍的记录不是同一件事，所以这几条留在这里。
       for (const line of lines.slice(1)) {
         let event;
         try {
@@ -419,9 +337,11 @@ console.log(
     chapters.length +
     " 章，" +
     mdFiles.length +
-    " 个 Markdown 文件，" +
-    "剧本字段、记录文件、相对链接、验证记录、身份掩码都查过了。",
+    " 个 Markdown 文件。本脚本查的是：五件套齐不齐、开头有没有署名行、相对链接断没断、" +
+    "记录文件的事件行合法且与同一章的剧本对得上、验证记录缺不缺项、身份信息有没有按规矩掩码、" +
+    "复制件与页面引用是否一致。",
 );
 console.log(
-  "提醒：剧本格式的权威校验是 fusion 的发版产物 scenario-check.mjs，本脚本只是结构自检。",
+  "剧本字段与事件流格式的权威校验不在这里，在 fusion 发布的 scenario-check.mjs 与 " +
+    "review-cli.mjs 里；CI 会按写死的版本下载来跑（见 .github/workflows/ci.yml）。",
 );

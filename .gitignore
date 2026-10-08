@@ -3,6 +3,7 @@ dist/
 .vercel/
 output/
 screenshots/
+.fusion-tools/
 *.log
 .DS_Store
 

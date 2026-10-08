@@ -23,9 +23,11 @@ fusion 的 ADR-0001 规定项目三只能依赖发布产物，ADR-0008 进一步
 2. 用 `curl -L -o vendor/fusion-sim-<新版本>.html https://github.com/xiaomijituan/fusion/releases/download/<新版本>/fusion-sim-<新版本>.html` 下载。
 3. 核对文件头三行写的版本号与你要的一致，再核对字节数。
 4. 把 `site/chapter.html` 里 `iframe` 的 `src` 改成新文件名（脚本 `scripts/check.mjs` 会检查有没有漏改，漏了会报错）。
-5. 删掉旧文件，更新上面这张表，把 `docs/` 里对应的版本说法一并改掉。
+5. 把 `.github/workflows/ci.yml` 里那个写死的 `FUSION_TAG` 改成新的 tag 名。CI 用它下载
+   `scenario-check.mjs` 与 `review-cli.mjs` 逐章校验，和这里的复制件应当是同一个版本。
+6. 删掉旧文件，更新上面这张表，把 `docs/` 里对应的版本说法一并改掉。
 
-fusion 在 `0.1.0` 之后重新发布了 `0.1.1`，原因是四条修复改变了这些产物的对外行为（那四条写在 fusion 的 ADR-0008 里）。依赖哪个版本以 fusion 的 README 和 ADR-0008 为准，不要把同一个版本号抄在好几个地方。
+fusion 在 `0.1.0` 之后重新发布了 `0.1.1`，原因是四条修复改变了这些产物的对外行为（那四条写在 fusion 的 ADR-0008 里）。依赖哪个版本以 fusion 的 README 和 ADR-0008 为准。本仓库里写版本号的地方只有两处：上面这张表，和 `.github/workflows/ci.yml` 里那个 `FUSION_TAG`（CI 用它下载 `scenario-check.mjs` 与 `review-cli.mjs`）；升级时两处一起改，别在别的脚本里再抄一份。
 
 ## 这份复制件被谁用
 
