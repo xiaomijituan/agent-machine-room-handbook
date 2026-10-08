@@ -26,7 +26,7 @@ jobs:
       - name: 格式化检查
         run: npm run format:check
 
-      - name: 内容自检（五件套 / 剧本字段 / 记录文件 / 链接 / 验证记录 / 身份掩码）
+      - name: 内容自检（五件套 / 署名行 / 记录文件 / 链接 / 验证记录 / 身份掩码 / 复制件）
         run: npm run check
 
       # 剧本格式与事件流格式的权威校验在 fusion 发布的两个单文件里。本仓库不复制 fusion 的
@@ -76,7 +76,7 @@ jobs:
           done
 
           if [ "$problems" -ne 0 ]; then
-            echo "上面这些是内容问题（退出码 1），要改的是那一章，不是环境。"
+            echo "上面这些是内容问题（退出码 1），要改的是上面点名的那些章节，不是环境。"
             exit 1
           fi
           echo "全部章节都经过了 fusion 产物的校验。"
