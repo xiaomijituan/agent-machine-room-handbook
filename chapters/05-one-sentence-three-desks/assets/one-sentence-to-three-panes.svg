@@ -1,0 +1,76 @@
+<svg width="1000" height="820"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 820"
+  role="img"
+  aria-label="派活决策图：一句话进来，先问三块屏谁能接。claude 屏卡住、在等人给方向，先回答提问不派新活；codex 屏正在跑构建第 6 步，派过去的话接不住、被静默吞掉；grok 屏空着，这句话落到这里，并拆成一句只放一件活、写清怎么算做完"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <defs>
+    <marker id="arw-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#97a1b3" />
+    </marker>
+    <marker id="arw-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4ade80" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="820" fill="#0d0f14" />
+
+  <!-- 标题 -->
+  <text x="500" y="56" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">一句话进来，三块屏谁能接？</text>
+
+  <!-- 你手上的一句话 -->
+  <rect x="40" y="96" width="920" height="96" rx="10" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="500" y="134" text-anchor="middle" font-size="32" fill="#e8ecf3">「把登录那块改成新写法，顺手把测试补上。」</text>
+  <text x="500" y="172" text-anchor="middle" font-size="32" fill="#97a1b3">一句话里塞了两件活：改写法 + 补测试</text>
+
+  <!-- 三条去路 -->
+  <line x1="190" y1="192" x2="190" y2="308" stroke="#97a1b3" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arw-grey)" />
+  <text x="202" y="262" font-size="32" fill="#97a1b3">先回答提问</text>
+
+  <line x1="500" y1="192" x2="500" y2="258" stroke="#f87171" stroke-width="4" />
+  <line x1="486" y1="270" x2="514" y2="298" stroke="#f87171" stroke-width="4" />
+  <line x1="486" y1="298" x2="514" y2="270" stroke="#f87171" stroke-width="4" />
+  <text x="512" y="262" font-size="32" fill="#f87171">派不过去</text>
+
+  <line x1="810" y1="192" x2="810" y2="308" stroke="#4ade80" stroke-width="4" marker-end="url(#arw-green)" />
+  <text x="822" y="262" font-size="32" fill="#4ade80">落到这里</text>
+
+  <!-- claude 屏：卡住 -->
+  <rect x="40" y="320" width="300" height="310" rx="10" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="60" y="366" font-size="34" font-weight="bold" fill="#e8ecf3">claude 屏</text>
+  <text x="60" y="410" font-size="32" font-weight="bold" fill="#f87171">● 卡住</text>
+  <text x="60" y="448" font-size="32" fill="#f87171">在等人给方向</text>
+  <line x1="60" y1="466" x2="320" y2="466" stroke="#242a36" stroke-width="2" />
+  <text x="60" y="500" font-size="32" fill="#e8ecf3">项目 · 登录改造</text>
+  <text x="60" y="538" font-size="32" fill="#97a1b3">旧调用点剩 7 处</text>
+  <text x="60" y="588" font-size="32" fill="#97a1b3">进度 45%</text>
+
+  <!-- codex 屏：正在跑 -->
+  <rect x="350" y="320" width="300" height="310" rx="10" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="370" y="366" font-size="34" font-weight="bold" fill="#e8ecf3">codex 屏</text>
+  <text x="370" y="410" font-size="32" font-weight="bold" fill="#4ade80">● 正在跑</text>
+  <text x="370" y="448" font-size="32" fill="#4ade80">构建到第 6 步</text>
+  <line x1="370" y1="466" x2="630" y2="466" stroke="#242a36" stroke-width="2" />
+  <text x="370" y="500" font-size="32" fill="#e8ecf3">项目 · 构建</text>
+  <text x="370" y="538" font-size="32" fill="#f87171">派话被静默跳过（模拟器规则）</text>
+  <text x="370" y="588" font-size="32" fill="#97a1b3">进度 55%</text>
+
+  <!-- grok 屏：空着 -->
+  <rect x="660" y="320" width="300" height="310" rx="10" fill="#11141a" stroke="#4ade80" stroke-width="3" />
+  <text x="680" y="366" font-size="34" font-weight="bold" fill="#e8ecf3">grok 屏</text>
+  <text x="680" y="410" font-size="32" font-weight="bold" fill="#4ade80">● 空着</text>
+  <text x="680" y="448" font-size="32" fill="#97a1b3">上一件做完了</text>
+  <line x1="680" y1="466" x2="940" y2="466" stroke="#242a36" stroke-width="2" />
+  <text x="680" y="500" font-size="32" fill="#e8ecf3">项目 · 测试</text>
+  <text x="680" y="538" font-size="32" fill="#97a1b3">在等一句新话</text>
+  <text x="680" y="588" font-size="32" fill="#97a1b3">进度 0%</text>
+
+  <!-- 落到空闲屏的那一句该长什么样 -->
+  <rect x="40" y="666" width="920" height="92" rx="10" fill="#11141a" stroke="#4ade80" stroke-width="2" />
+  <text x="500" y="702" text-anchor="middle" font-size="32" fill="#97a1b3">一句只放一件活，写清怎么算做完：</text>
+  <text x="500" y="742" text-anchor="middle" font-size="32" font-weight="bold" fill="#4ade80">只补登录模块的测试，验收是 npm test 全绿</text>
+
+  <!-- 收尾提醒 -->
+  <text x="500" y="794" text-anchor="middle" font-size="32" fill="#97a1b3">派活失败不出声：派完看一眼任务名变没变</text>
+</svg>

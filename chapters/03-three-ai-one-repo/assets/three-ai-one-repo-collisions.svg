@@ -1,0 +1,74 @@
+<svg width="1000" height="1020"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 1020"
+  role="img"
+  aria-label="三个 AI 共用一个仓库目录：A 屏改 session 文件第 40 行，被另一路写入整份盖回盖掉；B 屏换掉表结构字段名，C 屏按旧字段名写的测试从第一行起注定失败。红色标出两处撞车位置。"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <defs>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4ade80" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f87171" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="1020" fill="#0d0f14" />
+
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">三个 AI，同一个仓库：撞车发生在哪</text>
+  <text x="500" y="100" text-anchor="middle" font-size="32" fill="#97a1b3">第 3 章剧本演过的两处撞车：乱子一、乱子二</text>
+
+  <!-- 三块屏 -->
+  <rect x="60" y="130" width="280" height="152" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <rect x="360" y="130" width="280" height="152" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <rect x="660" y="130" width="280" height="152" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="80" y="172" font-size="34" font-weight="bold" fill="#e8ecf3">A 屏 · 改登录</text>
+  <text x="380" y="172" font-size="34" font-weight="bold" fill="#e8ecf3">B 屏 · 改表结构</text>
+  <text x="680" y="172" font-size="34" font-weight="bold" fill="#e8ecf3">C 屏 · 补测试</text>
+  <text x="80" y="230" font-size="32" fill="#97a1b3">写 session 文件</text>
+  <text x="380" y="230" font-size="32" fill="#97a1b3">写表结构文件</text>
+  <text x="680" y="230" font-size="32" fill="#97a1b3">写测试文件</text>
+
+  <!-- 屏幕到文件的正常写入（绿线） -->
+  <line x1="200" y1="286" x2="218" y2="480" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow-green)" />
+  <line x1="500" y1="286" x2="518" y2="480" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow-green)" />
+  <line x1="800" y1="286" x2="803" y2="480" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow-green)" />
+
+  <!-- 仓库目录 -->
+  <text x="44" y="420" font-size="32" font-weight="bold" fill="#e8ecf3">仓库目录（三份活共用一份）</text>
+  <rect x="40" y="430" width="920" height="420" rx="12" fill="none" stroke="#242a36" stroke-width="3" />
+
+  <!-- session 文件：乱子一 -->
+  <rect x="70" y="490" width="300" height="245" rx="8" fill="#11141a" stroke="#f87171" stroke-width="2.5" />
+  <text x="88" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">session 文件</text>
+  <text x="88" y="570" font-size="32" fill="#4ade80">A 屏改第 40 行</text>
+  <text x="88" y="602" font-size="32" fill="#4ade80">加超时重试</text>
+  <text x="88" y="646" font-size="32" fill="#f87171">另一路写入整份盖回</text>
+  <text x="88" y="678" font-size="32" fill="#f87171">A 屏改动没了</text>
+  <text x="88" y="712" font-size="32" fill="#97a1b3">没有任何提示</text>
+
+  <!-- 表结构文件：乱子二的源头 -->
+  <rect x="390" y="490" width="260" height="245" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="408" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">表结构文件</text>
+  <text x="408" y="570" font-size="32" fill="#e8ecf3">B 屏换了字段名</text>
+
+  <!-- 测试文件：乱子二的爆发点 -->
+  <rect x="670" y="490" width="270" height="245" rx="8" fill="#11141a" stroke="#f87171" stroke-width="2.5" />
+  <text x="688" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">测试文件</text>
+  <text x="688" y="570" font-size="32" fill="#f87171">按旧字段名写的</text>
+  <text x="688" y="610" font-size="32" fill="#f87171">从第一行起</text>
+  <text x="688" y="650" font-size="32" fill="#f87171">注定失败</text>
+
+  <!-- 表结构 → 测试 的依赖撞车（红色虚线） -->
+  <path d="M520 735 V 795 H 805 V 752" fill="none" stroke="#f87171" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arrow-red)" />
+  <text x="662" y="832" text-anchor="middle" font-size="32" fill="#f87171">字段名换了，没人告诉 C 屏</text>
+
+  <!-- 规矩条 -->
+  <rect x="60" y="870" width="880" height="54" rx="8" fill="#242a36" />
+  <text x="500" y="908" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">一条规矩挡掉大半：一个文件同一时刻只归一个 AI 改</text>
+
+  <!-- 证据说明 -->
+  <text x="500" y="962" text-anchor="middle" font-size="32" fill="#97a1b3">绿线是各自的写入，红框红字是撞车的位置</text>
+  <text x="500" y="1002" text-anchor="middle" font-size="32" fill="#97a1b3">两处撞车出自本章剧本，真实仓库里的形态未实测</text>
+</svg>

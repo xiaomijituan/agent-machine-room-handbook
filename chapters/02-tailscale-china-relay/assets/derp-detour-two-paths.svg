@@ -1,0 +1,58 @@
+<svg width="1000" height="720"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 720"
+  role="img"
+  aria-label="同一对设备的两条路：手机在家里 Wi-Fi 时走内网直连，6 到 14 毫秒，10 次全是内网直连；手机走蜂窝流量时打洞失败，流量绕中继(tok) DERP(tok)，297 毫秒到 1.804 秒，15 次里 0 次直连"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <defs>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f87171" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="720" fill="#0d0f14" />
+
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">国内的问题不在安装，在路径</text>
+  <text x="500" y="110" text-anchor="middle" font-size="32" fill="#97a1b3">装得上、登得上；差别在下面这两条路</text>
+
+  <rect x="40" y="148" width="450" height="442" rx="12" fill="none" stroke="#242a36" stroke-width="3" />
+  <rect x="510" y="148" width="450" height="442" rx="12" fill="none" stroke="#242a36" stroke-width="3" />
+
+  <text x="265" y="190" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">手机在家里 Wi-Fi</text>
+  <text x="265" y="232" text-anchor="middle" font-size="32" fill="#4ade80">● 直连，流量没出家门</text>
+
+  <text x="735" y="190" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">手机走蜂窝流量</text>
+  <text x="735" y="232" text-anchor="middle" font-size="32" fill="#f87171">● 打洞失败，绕中继</text>
+
+  <rect x="620" y="252" width="230" height="60" rx="8" fill="#11141a" stroke="#f87171" stroke-width="2" />
+  <text x="735" y="293" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">中继(tok)</text>
+
+  <rect x="56" y="352" width="160" height="76" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="136" y="401" text-anchor="middle" font-size="32" fill="#e8ecf3">家里电脑</text>
+  <rect x="324" y="352" width="140" height="76" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="394" y="401" text-anchor="middle" font-size="32" fill="#e8ecf3">手机</text>
+
+  <rect x="526" y="352" width="160" height="76" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="606" y="401" text-anchor="middle" font-size="32" fill="#e8ecf3">家里电脑</text>
+  <rect x="794" y="352" width="140" height="76" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="864" y="401" text-anchor="middle" font-size="32" fill="#e8ecf3">手机</text>
+
+  <line x1="232" y1="390" x2="308" y2="390" stroke="#4ade80" stroke-width="5" />
+  <path d="M232 380 L232 400 L216 390 Z" fill="#4ade80" />
+  <path d="M308 380 L308 400 L324 390 Z" fill="#4ade80" />
+
+  <line x1="606" y1="348" x2="660" y2="316" stroke="#f87171" stroke-width="4" marker-end="url(#arrow-bad)" />
+  <line x1="810" y1="316" x2="864" y2="348" stroke="#f87171" stroke-width="4" marker-end="url(#arrow-bad)" />
+
+  <text x="265" y="470" text-anchor="middle" font-size="32" fill="#97a1b3">via 内网地址:端口</text>
+  <text x="265" y="512" text-anchor="middle" font-size="32" font-weight="bold" fill="#4ade80">6 ～ 14 毫秒</text>
+  <text x="265" y="554" text-anchor="middle" font-size="32" fill="#e8ecf3">10 次全是内网直连</text>
+
+  <text x="735" y="470" text-anchor="middle" font-size="32" fill="#97a1b3">via DERP(tok)</text>
+  <text x="735" y="512" text-anchor="middle" font-size="32" font-weight="bold" fill="#f87171">297 毫秒 ～ 1.804 秒</text>
+  <text x="735" y="554" text-anchor="middle" font-size="32" fill="#e8ecf3">15 次里 0 次直连</text>
+
+  <text x="500" y="640" text-anchor="middle" font-size="32" fill="#97a1b3">打洞为什么失败，这次输出里没有证据，本图只画现象</text>
+  <text x="500" y="684" text-anchor="middle" font-size="32" fill="#97a1b3">数字来自一台机器、一条宽带，换网络要重测</text>
+</svg>

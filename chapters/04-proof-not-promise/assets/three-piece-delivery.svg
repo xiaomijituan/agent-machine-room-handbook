@@ -1,0 +1,49 @@
+<svg width="1000" height="660"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 660"
+  role="img"
+  aria-label="左边是 AI 的回复只有一句结论：改完了、测试全部通过，没有命令输出也没有文件清单；右边是正文要求的三样——改了哪几个文件、跑了哪条命令、那条命令打印了什么；底部结论：三样缺一样，就当没做完"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <rect x="0" y="0" width="1000" height="660" fill="#0d0f14" />
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">
+    AI 说"做完了"，要三样东西
+  </text>
+
+  <rect x="60" y="110" width="300" height="340" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="84" y="152" font-size="32" fill="#97a1b3">AI 的回复</text>
+  <text x="84" y="210" font-size="32" font-weight="bold" fill="#f87171">"改完了，</text>
+  <text x="84" y="250" font-size="32" font-weight="bold" fill="#f87171">测试全部通过"</text>
+  <line x1="84" y1="272" x2="336" y2="272" stroke="#242a36" stroke-width="2" />
+  <text x="84" y="316" font-size="32" fill="#e8ecf3">一句结论，没了</text>
+  <text x="84" y="364" font-size="32" fill="#97a1b3">没有命令输出</text>
+  <text x="84" y="404" font-size="32" fill="#97a1b3">没有文件清单</text>
+
+  <defs>
+    <marker id="ask" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4ade80" />
+    </marker>
+  </defs>
+  <line x1="376" y1="266" x2="438" y2="266" stroke="#4ade80" stroke-width="4" marker-end="url(#ask)" />
+  <text x="410" y="316" text-anchor="middle" font-size="32" font-weight="bold" fill="#4ade80">要</text>
+
+  <rect x="470" y="110" width="470" height="100" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="494" y="152" font-size="32" font-weight="bold" fill="#4ade80">1 · 改了哪几个文件</text>
+  <text x="494" y="192" font-size="32" fill="#97a1b3">每个文件改了什么</text>
+
+  <rect x="470" y="226" width="470" height="64" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="494" y="268" font-size="32" font-weight="bold" fill="#4ade80">2 · 跑了哪条命令</text>
+
+  <rect x="470" y="306" width="470" height="144" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="494" y="348" font-size="32" font-weight="bold" fill="#4ade80">3 · 那条命令打印了什么</text>
+  <text x="494" y="388" font-size="32" fill="#97a1b3">完整输出，末行统计看得见</text>
+  <text x="494" y="428" font-size="32" fill="#97a1b3">跑了哪些文件、几个用例</text>
+
+  <text x="470" y="492" font-size="32" fill="#97a1b3">只贴末行不够——</text>
+  <text x="470" y="530" font-size="32" fill="#97a1b3">末行能由任何一条命令产生</text>
+
+  <rect x="60" y="556" width="880" height="64" rx="8" fill="#242a36" />
+  <text x="500" y="598" text-anchor="middle" font-size="36" font-weight="bold" fill="#e8ecf3">
+    三样缺一样，就当没做完
+  </text>
+</svg>
