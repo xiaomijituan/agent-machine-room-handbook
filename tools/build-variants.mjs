@@ -92,6 +92,13 @@ function inline(text) {
     /(^|[^*])\*([^*\n]+)\*/g,
     (_m, pre, em) => `${pre}<em>${em}</em>`,
   );
+  // 图片必须排在链接前面：`![说明](assets/x.svg)` 里也有一段 `[说明](...)`，
+  // 先跑链接规则会把感叹号留成孤立文字。路径只允许指向仓库里的相对文件——
+  // 掘金那一版带不走远程资源，正文里塞外链图片等于把读者的请求交给第三方。
+  out = out.replace(
+    /!\[([^\]]*)\]\((?!https?:)([^)\s]+)\)/g,
+    (_m, alt, src) => `<img src="${src}" alt="${alt}" />`,
+  );
   out = out.replace(
     /\[([^\]]+)\]\((https?:[^)\s]+)\)/g,
     (_m, label, href) => `<a href="${href}">${label}</a>`,
@@ -271,7 +278,12 @@ function juejinDocument(chapter, md, table, scenarioText) {
 }
 
 function siteDocument(chapter, md, scenarioText, table) {
-  const body = renderMarkdown(md);
+  // 正文里的图片路径是相对本章目录写的（`assets/x.svg`），而产物页住在 output/site/ 下，
+  // 不重写就会 404。这里把相对路径改成从产物页出发能走到的真实位置。
+  const body = renderMarkdown(md).replace(
+    /src="(?!https?:|\/)([^"]+)"/g,
+    (_m, path) => `src="../../chapters/${chapter}/${path}"`,
+  );
   return `<!doctype html>
 <html lang="zh">
   <head>
@@ -331,6 +343,12 @@ function siteDocument(chapter, md, scenarioText, table) {
         padding: 6px 8px;
         text-align: left;
         vertical-align: top;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 16px 0;
       }
       blockquote {
         margin: 12px 0;

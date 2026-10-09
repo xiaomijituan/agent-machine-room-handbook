@@ -1,0 +1,66 @@
+<svg width="1000" height="740"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 740"
+  role="img"
+  aria-label="一屏一格：三块屏幕分别跑 claude、codex、opencode，其中 codex 卡在等回答，你只在拍板时出现"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <rect x="0" y="0" width="1000" height="740" fill="#0d0f14" />
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">
+    屏幕是分给 AI 的，不是分给你自己的
+  </text>
+  <rect
+    x="60"
+    y="96"
+    width="880"
+    height="470"
+    rx="12"
+    fill="none"
+    stroke="#242a36"
+    stroke-width="3"
+  />
+  <rect x="74" y="110" width="280" height="380" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <rect x="364" y="110" width="280" height="380" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <rect x="654" y="110" width="280" height="380" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />
+  <text x="94" y="152" font-size="34" font-weight="bold" fill="#e8ecf3">claude</text>
+  <text x="384" y="152" font-size="34" font-weight="bold" fill="#e8ecf3">codex</text>
+  <text x="674" y="152" font-size="34" font-weight="bold" fill="#e8ecf3">opencode</text>
+  <text x="94" y="200" font-size="32" font-weight="bold" fill="#4ade80">● 在干活</text>
+  <text x="384" y="200" font-size="32" font-weight="bold" fill="#f87171">● 在等你回答</text>
+  <text x="674" y="200" font-size="32" font-weight="bold" fill="#97a1b3">● 跑完了</text>
+  <line x1="94" y1="222" x2="334" y2="222" stroke="#242a36" stroke-width="2" />
+  <line x1="384" y1="222" x2="624" y2="222" stroke="#242a36" stroke-width="2" />
+  <line x1="674" y1="222" x2="914" y2="222" stroke="#242a36" stroke-width="2" />
+  <text x="94" y="264" font-size="32" fill="#e8ecf3">装依赖中</text>
+  <text x="94" y="308" font-size="32" fill="#e8ecf3">屏幕一直在刷</text>
+  <text x="384" y="264" font-size="32" fill="#e8ecf3">同一个测试</text>
+  <text x="384" y="308" font-size="32" fill="#e8ecf3">第三次失败</text>
+  <text x="384" y="352" font-size="32" fill="#e8ecf3">问题抛回给你</text>
+  <text x="674" y="264" font-size="32" fill="#e8ecf3">云端构建</text>
+  <text x="674" y="308" font-size="32" fill="#e8ecf3">产物已生成</text>
+  <text x="674" y="352" font-size="32" fill="#e8ecf3">跑在云端主机上</text>
+  <rect x="74" y="502" width="860" height="54" rx="8" fill="#242a36" />
+  <text x="500" y="539" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">
+    关掉你的终端窗口，这三块屏照跑
+  </text>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f87171" />
+    </marker>
+  </defs>
+  <line
+    x1="504"
+    y1="616"
+    x2="504"
+    y2="578"
+    stroke="#f87171"
+    stroke-width="4"
+    stroke-dasharray="10 8"
+    marker-end="url(#arrow)"
+  />
+  <circle cx="504" cy="652" r="22" fill="#e8ecf3" />
+  <rect x="464" y="678" width="80" height="42" rx="21" fill="#e8ecf3" />
+  <text x="444" y="690" text-anchor="end" font-size="40" font-weight="bold" fill="#e8ecf3">你</text>
+  <text x="564" y="668" font-size="32" fill="#f87171">这块屏问话时，你拍板</text>
+  <text x="564" y="710" font-size="32" fill="#97a1b3">另外两块不用看着</text>
+</svg>
