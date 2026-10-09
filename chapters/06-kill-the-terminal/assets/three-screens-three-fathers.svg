@@ -29,7 +29,7 @@
   <rect x="414" y="224" width="250" height="78" rx="8" fill="#0d0f14" stroke="#f87171" stroke-width="2" />
   <text x="539" y="270" text-anchor="middle" font-size="32" fill="#e8ecf3">终端会话</text>
   <text x="814" y="270" text-anchor="middle" font-size="32" font-weight="bold" fill="#f87171">会收到挂起信号</text>
-  <text x="64" y="338" font-size="32" fill="#97a1b3">这一格是通用机制：本章没在实验机上抓过挂起信号的现场</text>
+  <text x="64" y="338" font-size="32" fill="#97a1b3">在另一台机器上量到了：日志停在第 4 行，进程变僵尸</text>
 
   <rect x="40" y="378" width="920" height="210" rx="12" fill="#11141a" stroke="#242a36" stroke-width="3" />
   <text x="64" y="424" font-size="32" font-weight="bold" fill="#e8ecf3">屏二 · nohup 加 disown 起的进程：父亲是 1 号</text>
