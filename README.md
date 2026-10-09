@@ -55,6 +55,33 @@ npm run format       # 格式化（vendor/ 里的第三方复制件不参与格�
 `scenario-check.mjs` 与 `review-cli.mjs` 里，CI 会按写死的版本下载来逐章跑一遍
 （见 [.github/workflows/ci.yml](./.github/workflows/ci.yml)）；这一步要联网，所以放在 CI 而不是本地钩子里。
 
+## 两个版式怎么产出
+
+同一份正文要发两个地方：自己的站点（能点）和掘金（只能图文，掘金会把 iframe 与原始 HTML 过滤掉）。
+所以两个版式都不靠手抄，由一条命令从同一份 `index.md` 生成：
+
+```bash
+npm run build:site
+```
+
+它读每章的三份文件（`index.md`、`scenario.json`、`reference.jsonl`），产出两份东西：
+
+- `output/site/<章节目录>.html` —— 站点版。正文渲染成页面，页面下方嵌着 `vendor/` 里那份模拟器，
+  本章的剧本直接写在页面里递给它，不需要查询参数。本地看：先 `npm run serve:site`（只监听
+  127.0.0.1:5280），再打开 <http://127.0.0.1:5280/output/site/01-one-screen-many-ai.html>。
+  这一步要等模拟器回话，最慢约一秒；递不进去时页面下方有"注入失败怎么办"，把本章剧本原文摊开
+  供手工粘贴。
+- `output/juejin/<章节目录>.md` —— 掘金版。正文原样保留（一个字都不改），文末追加两段：
+  一张决策表和一份可复制的剧本全文。决策表由 fusion 发布的 `review-cli.mjs` 从该章的
+  `reference.jsonl` 投影而来，本仓库不再另写一份投影规则。
+
+掘金版过三道守卫，任何一道不过，`npm run build:site` 就以退出码 1 结束：产物里搜不到 `<iframe`
+和 `<script`；外链只允许落在 `github.com`、`127.0.0.1`、`localhost` 和 Tailscale 官方那几个域名上，
+出现别的主机就说明有人把链接指到了某个部署实例；决策表和当场再跑一次投影器的结果逐字相同。
+
+`output/` 是产物目录，不入库。构建需要 `.fusion-tools/review-cli.mjs` 在场（那是 fusion 按版本号发布的
+那份投影器，CI 会自己下载；本地缺了它会以退出码 2 结束并把下载命令原样打给你）。
+
 ## 这个仓库的三条硬规矩
 
 写正文之前先读 [STYLE.md](./STYLE.md)，改任何东西之前先读 [GLOSSARY.md](./GLOSSARY.md)：

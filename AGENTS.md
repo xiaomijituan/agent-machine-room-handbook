@@ -20,9 +20,10 @@ npm run format       # 格式化；钩子只检查不改写
 - pre-commit：`npm run check` + `npx prettier --check .`
 
 CI（`.github/workflows/ci.yml` 里那个叫 `gates` 的作业）的顺序是：`npm ci` → `format:check` →
-`check` → 用 fusion 发布的两个产物做权威校验。最后一步按写死的版本（现在是 `v0.1.2`）下载
-`scenario-check.mjs` 与 `review-cli.mjs`，逐章跑一遍；下载失败按退出码 2 报"环境问题"，
-剧本或记录文件不合格按退出码 1 报"内容不合格"，两种提示不一样。
+`check` → 用 fusion 发布的两个产物做权威校验 → 编译两个版式（`npm run build:site`）。倒数第二步按
+写死的版本（现在是 `v0.1.2`）下载 `scenario-check.mjs` 与 `review-cli.mjs`，逐章跑一遍；下载失败按
+退出码 2 报"环境问题"，剧本或记录文件不合格按退出码 1 报"内容不合格"，两种提示不一样。最后一步要用
+上一步下载下来的投影器，所以排在它后面。
 
 服务端（GitHub 分支保护，本地绕不过）：改 `main` 必须走 PR、`gates` 必须绿、
 禁止 force push 与删除 `main`。管理员豁免（单人节奏，所以你自己直推仍能过）。
@@ -49,6 +50,10 @@ chapters/NN-slug/
 
 ## 约定
 
+- **正文只有一份，两个版式都由脚本生成。** 改站点版的样式或掘金版的追加段落，改
+  `tools/build-variants.mjs`；`output/` 是产物目录，不入库，也别手改里面的文件。
+  往正文里手抄一张决策表是这条规矩最典型的违反——那张表必须由 `review-cli.mjs` 投影出来，
+  脚本每次重跑一次做逐字比对。
 - **写作规矩在 `STYLE.md`，六条**。最容易被违反的两条：不用"它/那个/前者/后者"这类
   回指词；词表外的术语第一次出现必须当场解释。
 - **测到的和推出来的分开写。** 没复现的结论标"没测到"，并列出验证命令。

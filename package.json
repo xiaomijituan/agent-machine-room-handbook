@@ -6,6 +6,7 @@
   "description": "《agent 机房手册》——中文可运行教程：让几个 AI 一起干活时，你的机器该长什么样",
   "scripts": {
     "check": "node scripts/check.mjs",
+    "build:site": "node tools/build-variants.mjs",
     "serve:site": "node site/serve.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

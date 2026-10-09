@@ -50,7 +50,10 @@ const KNOWN_STATUS = ["working", "blocked", "done", "idle"];
 const collect = (dir, extension) => {
   const out = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
+    // output/ 是 npm run build:site 生成的两个版式，扫它等于把同一份正文查两遍，
+    // 而且产物里的相对链接是从 output/ 出发算的，跟正文的基准不一样，只会制造误报。
+    if (entry.name === "node_modules" || entry.name === "output") continue;
+    if (entry.name.startsWith(".")) continue;
     const full = join(dir, entry.name);
     if (entry.isDirectory()) out.push(...collect(full, extension));
     else if (entry.name.endsWith(extension)) out.push(full);
