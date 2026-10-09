@@ -6,14 +6,15 @@
 
 ## 目录
 
-| 章                                                                                     | 讲什么                                             | 在哪台机器上验的                  |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------- |
-| [第 1 章 一个屏幕开好几块，各跑各的](./chapters/01-one-screen-many-ai/index.md)        | tmux 入门，角度是"屏幕是分给 AI 的"                | 云端 Ubuntu 22.04                 |
-| [第 2 章 出门就连不上](./chapters/02-tailscale-china-relay/index.md)                   | 国内用 Tailscale：装得上、登得上，坑在中继在境外   | 作者本人的 Windows + 一部安卓手机 |
-| [第 3 章 三个 AI 同时干一个活](./chapters/03-three-ai-one-repo/index.md)               | 同一个仓库交给三个 AI 会出的乱子                   | 模拟器 + 本机网络实测             |
-| [第 4 章 AI 说它做完了](./chapters/04-proof-not-promise/index.md)                      | 怎么验收：看输出，别看结论                         | 本机 git 实测 + 模拟器            |
-| [第 5 章 三块屏都停着，你只有一句话](./chapters/05-one-sentence-three-desks/index.md)  | 派活：给谁、拆不拆、怎么算做完                     | 模拟器                            |
-| [第 6 章 终端窗口关掉了，正在跑的活会不会死](./chapters/06-kill-the-terminal/index.md) | 进程认的是父进程，不认窗口开不开；断网那一条没量到 | nohup / tmux                      |
+| 章                                                                                     | 讲什么                                                 | 在哪台机器上验的                  |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------- |
+| [第 1 章 一个屏幕开好几块，各跑各的](./chapters/01-one-screen-many-ai/index.md)        | tmux 入门，角度是"屏幕是分给 AI 的"                    | 云端 Ubuntu 22.04                 |
+| [第 2 章 出门就连不上](./chapters/02-tailscale-china-relay/index.md)                   | 国内用 Tailscale：装得上、登得上，坑在中继在境外       | 作者本人的 Windows + 一部安卓手机 |
+| [第 3 章 三个 AI 同时干一个活](./chapters/03-three-ai-one-repo/index.md)               | 同一个仓库交给三个 AI 会出的乱子                       | 模拟器 + 本机网络实测             |
+| [第 4 章 AI 说它做完了](./chapters/04-proof-not-promise/index.md)                      | 怎么验收：看输出，别看结论                             | 本机 git 实测 + 模拟器            |
+| [第 5 章 三块屏都停着，你只有一句话](./chapters/05-one-sentence-three-desks/index.md)  | 派活：给谁、拆不拆、怎么算做完                         | 模拟器                            |
+| [第 6 章 终端窗口关掉了，正在跑的活会不会死](./chapters/06-kill-the-terminal/index.md) | 进程认的是父进程，不认窗口开不开；断网那一条没量到     | nohup / tmux                      |
+| [第 7 章 两台机器，一条虚拟局域网](./chapters/07-two-machines-one-tailnet/index.md)    | 连上不等于直连：十次全绕中继；断掉再回来头两秒必然不通 | 两台真机                          |
 
 还有两章在等第二台设备到位：**连起两台电脑**、**断网了 AI 会不会丢**。
 
