@@ -350,6 +350,16 @@ function siteDocument(chapter, md, scenarioText, table) {
         display: block;
         margin: 16px 0;
       }
+      /* 配图按 viewBox 宽度等比缩放：main 左右各 16px 内边距会让 390px 屏幕上的图只剩
+         358px，图里 32 号的中文就掉到 11.5px。窄屏让小图越过这 32px，字号折算才站得住。 */
+      @media (max-width: 520px) {
+        main img {
+          width: calc(100% + 32px);
+          max-width: none;
+          margin-left: -16px;
+          margin-right: -16px;
+        }
+      }
       blockquote {
         margin: 12px 0;
         padding: 4px 14px;
