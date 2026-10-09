@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch06-kill-the-terminal",
+  "version": "0.1",
+  "name": "关掉终端窗口，这三块屏谁会死",
+  "hosts": [
+    {
+      "id": "lab-linux",
+      "role": "Linux 实验机",
+      "place": "同一台机器上三种起法，各自等一句话"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "foreground-job",
+      "project": "训练脚本",
+      "title": "前台直接跑的长活",
+      "lines": {
+        "zh": [
+          "在一块屏的前台跑着一个要两小时的脚本",
+          "它的父亲就是这个终端会话"
+        ]
+      },
+      "question": {
+        "text": "你现在要关掉这个终端窗口：",
+        "options": [
+          {
+            "id": "just-close",
+            "label": "直接关，先看会发生什么"
+          },
+          {
+            "id": "ctrl-c-first",
+            "label": "先手动停掉再关"
+          },
+          {
+            "id": "kill",
+            "label": "这块屏不管了，关掉"
+          }
+        ]
+      }
+    },
+    {
+      "key": "detached-job",
+      "project": "训练脚本",
+      "title": "用 nohup 分离出去的长活",
+      "lines": {
+        "zh": [
+          "同一个脚本，用 nohup 起、并且 disown 掉了",
+          "它的父进程已经变成 1，不再挂在这个终端上"
+        ]
+      },
+      "question": {
+        "text": "关掉这个终端窗口之前，你想知道的是：",
+        "options": [
+          {
+            "id": "check-log",
+            "label": "关完之后换个 shell 去看日志有没有继续长"
+          },
+          {
+            "id": "think-same",
+            "label": "觉得反正都一样，不用看"
+          },
+          {
+            "id": "kill",
+            "label": "这块屏不管了，关掉"
+          }
+        ]
+      }
+    },
+    {
+      "key": "tmux-job",
+      "project": "训练脚本",
+      "title": "在 tmux 会话里跑的长活",
+      "lines": {
+        "zh": [
+          "脚本跑在一个 tmux 会话里，这个会话是分离创建的",
+          "你正用一个假装出来的终端看着它"
+        ]
+      },
+      "question": {
+        "text": "你把这个看进去的终端掐断：",
+        "options": [
+          {
+            "id": "reattach",
+            "label": "过一会儿重新 attach 回去看进度"
+          },
+          {
+            "id": "assume-dead",
+            "label": "认为会话跟着终端一起没了"
+          },
+          {
+            "id": "kill",
+            "label": "这块屏不管了，关掉"
+          }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "lab-linux",
+      "task": "foreground-job",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 30
+    },
+    {
+      "host": "lab-linux",
+      "task": "detached-job",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 40
+    },
+    {
+      "host": "lab-linux",
+      "task": "tmux-job",
+      "kind": "opencode",
+      "status": "blocked",
+      "progress": 50
+    }
+  ]
+}
