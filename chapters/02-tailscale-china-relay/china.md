@@ -58,7 +58,7 @@ tailscale ping <对端的 tailnet 地址>
 
 ```
 pong from <phone> (100.x.y.z) via <lan-ip:port> in 6ms         ← 同一个局域网，直连
-pong from <phone> (100.x.y.z) via DERP(tok) in 320ms           ← 走流量了，绕东京中继
+pong from <phone> (100.x.y.z) via DERP(tok) in 320ms           ← 走流量了，绕代号 tok 的中继
 direct connection not established                              ← 命令自己补的一句
 ```
 

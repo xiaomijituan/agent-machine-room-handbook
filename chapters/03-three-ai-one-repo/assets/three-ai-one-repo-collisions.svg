@@ -41,12 +41,12 @@
 
   <!-- session 文件：乱子一 -->
   <rect x="70" y="490" width="300" height="245" rx="8" fill="#11141a" stroke="#f87171" stroke-width="2.5" />
-  <text x="88" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">session 文件</text>
-  <text x="88" y="570" font-size="32" fill="#4ade80">A 屏改第 40 行</text>
-  <text x="88" y="602" font-size="32" fill="#4ade80">加超时重试</text>
-  <text x="88" y="646" font-size="32" fill="#f87171">另一路写入整份盖回</text>
-  <text x="88" y="678" font-size="32" fill="#f87171">A 屏改动没了</text>
-  <text x="88" y="712" font-size="32" fill="#97a1b3">没有任何提示</text>
+  <text x="88" y="524" font-size="34" font-weight="bold" fill="#e8ecf3">session 文件</text>
+  <text x="88" y="564" font-size="32" fill="#4ade80">A 屏改第 40 行</text>
+  <text x="88" y="604" font-size="32" fill="#4ade80">加超时重试</text>
+  <text x="88" y="644" font-size="32" fill="#f87171">另一路写入整份盖回</text>
+  <text x="88" y="684" font-size="32" fill="#f87171">A 屏改动没了</text>
+  <text x="88" y="724" font-size="32" fill="#97a1b3">没有任何提示</text>
 
   <!-- 表结构文件：乱子二的源头 -->
   <rect x="390" y="490" width="260" height="245" rx="8" fill="#11141a" stroke="#242a36" stroke-width="2" />

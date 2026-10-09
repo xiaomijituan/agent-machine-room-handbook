@@ -53,7 +53,7 @@
   <text x="370" y="448" font-size="32" fill="#4ade80">构建到第 6 步</text>
   <line x1="370" y1="466" x2="630" y2="466" stroke="#242a36" stroke-width="2" />
   <text x="370" y="500" font-size="32" fill="#e8ecf3">项目 · 构建</text>
-  <text x="370" y="538" font-size="32" fill="#f87171">派话被静默跳过（模拟器规则）</text>
+  <text x="370" y="538" font-size="32" fill="#f87171">派话被静默跳过</text>
   <text x="370" y="588" font-size="32" fill="#97a1b3">进度 55%</text>
 
   <!-- grok 屏：空着 -->
@@ -72,5 +72,5 @@
   <text x="500" y="742" text-anchor="middle" font-size="32" font-weight="bold" fill="#4ade80">只补登录模块的测试，验收是 npm test 全绿</text>
 
   <!-- 收尾提醒 -->
-  <text x="500" y="794" text-anchor="middle" font-size="32" fill="#97a1b3">派活失败不出声：派完看一眼任务名变没变</text>
+  <text x="500" y="794" text-anchor="middle" font-size="32" fill="#97a1b3">派活失败不出声是模拟器规则：派完看一眼任务名变没变</text>
 </svg>
