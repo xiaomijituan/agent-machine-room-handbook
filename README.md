@@ -72,17 +72,24 @@ npm run build:site
 它读每章的三份文件（`index.md`、`scenario.json`、`reference.jsonl`），产出两份东西：
 
 - `output/site/<章节目录>.html` —— 站点版。正文渲染成页面，页面下方嵌着 `vendor/` 里那份模拟器，
-  本章的剧本直接写在页面里递给它，不需要查询参数。本地看：先 `npm run serve:site`（只监听
-  127.0.0.1:5280），再打开 <http://127.0.0.1:5280/output/site/01-one-screen-many-ai.html>。
+  本章的剧本直接写在页面里递给它，不需要查询参数。**这一层目录就是公网部署的东西**：
+  <https://xiaomijituan.github.io/agent-machine-room-handbook/>，由
+  `.github/workflows/pages.yml` 在每次合进 `main` 时构建并发出去。页面里的路径全部相对
+  `output/site/` 这一层（本章配图复制进 `output/site/assets/<章节目录>/`，模拟器复制件在
+  `output/site/vendor/`），所以站点挂在 `/agent-machine-room-handbook/` 这种子路径下不用改任何东西。
+  本地看：先 `npm run serve:site`（只监听 127.0.0.1:5280），再打开
+  <http://127.0.0.1:5280/output/site/01-one-screen-many-ai.html>。
   这一步要等模拟器回话，最慢约一秒；递不进去时页面下方有"注入失败怎么办"，把本章剧本原文摊开
   供手工粘贴。
-- `output/juejin/<章节目录>.md` —— 掘金版。正文原样保留（一个字都不改），文末追加两段：
-  一张决策表和一份可复制的剧本全文。决策表由 fusion 发布的 `review-cli.mjs` 从该章的
-  `reference.jsonl` 投影而来，本仓库不再另写一份投影规则。
+- `output/juejin/<章节目录>.md` —— 掘金版。正文原样保留（一个字都不改），文末追加三段：
+  一张决策表、一段"想自己点这里"（指向上面那个公网地址，因为掘金会把交互内容过滤掉）、
+  一份可复制的剧本全文。决策表由 fusion 发布的 `review-cli.mjs` 从该章的 `reference.jsonl`
+  投影而来，本仓库不再另写一份投影规则。
 
 掘金版过三道守卫，任何一道不过，`npm run build:site` 就以退出码 1 结束：产物里搜不到 `<iframe`
-和 `<script`；外链只允许落在 `github.com`、`127.0.0.1`、`localhost` 和 Tailscale 官方那几个域名上，
-出现别的主机就说明有人把链接指到了某个部署实例；决策表和当场再跑一次投影器的结果逐字相同。
+和 `<script`；外链只允许落在 `github.com`、`127.0.0.1`、`localhost`、本仓库自己的 Pages 地址和
+Tailscale 官方那几个域名上——白名单里唯一的部署实例就是我们自己发出去的那个，别的主机出现就说明
+有人把链接指到了临时地址；决策表和当场再跑一次投影器的结果逐字相同。
 
 正文里的配图是各章目录下的 SVG（例如 `chapters/01-one-screen-many-ai/assets/one-screen-per-agent.svg`），
 只允许相对路径，不接受远程图片——掘金那一版带不走外部资源。站点版会把相对路径改写成从产物页

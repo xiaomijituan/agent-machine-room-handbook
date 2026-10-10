@@ -26,11 +26,15 @@ const outSite = join(root, "output", "site");
 const outJuejin = join(root, "output", "juejin");
 
 // 掘金版里允许出现的主机。全是正文已经用到的官方站与本地地址；新增外链要先想清楚它是不是
-// 指向某个部署实例——那正是这张票禁止的东西。
+// 指向一个长期维护的地址。xiaomijituan.github.io 是这一条的例外，也是唯一的一个：那是本仓库
+// 自己的 Pages 部署（.github/workflows/pages.yml 每次合进 main 就发一次产物），掘金会把交互
+// 内容整段过滤掉，所以"想自己点"只能靠这个地址兑现——没有它，可点这件事只有作者自己看得到。
+const SITE_BASE = "https://xiaomijituan.github.io/agent-machine-room-handbook/";
 const ALLOWED_HOSTS = new Set([
   "github.com",
   "127.0.0.1",
   "localhost",
+  "xiaomijituan.github.io",
   "api.tailscale.com",
   "controlplane.tailscale.com",
   "login.tailscale.com",
@@ -264,6 +268,20 @@ function juejinDocument(chapter, md, table, scenarioText) {
     // 就会出现两条大标题（2026-10-10 第 2 章发掘金时实测到的）。所以贴进来时降一级——改的是
     // 这一版排版的层级，不是投影器算出来的内容。
     table.replace(/^# /gm, "## ").replace(/\s+$/, ""),
+    "",
+  );
+  // 掘金不收 iframe，所以"这一章可以点"这件事在掘金只能靠一个地址兑现。没有这一段的话，
+  // 读者看完只知道有个模拟器，不知道去哪儿点。
+  parts.push(
+    "---",
+    "",
+    "## 想自己点这里",
+    "",
+    `这一章的模拟器嵌在我们自己的站点上：<${SITE_BASE}${chapter}.html>`,
+    "",
+    "打开就是本章那一局：剧本已经递给它了，点格子、拍板、导出这一局都能做。",
+    "掘金会把页面里的交互内容过滤掉，所以这一章在掘金只有图文，能点的那部分在上面那个地址里。",
+    "那个站点由本仓库每次合进 main 自动构建，和正文是同一份来源，不是另写的一份演示。",
     "",
   );
   if (scenarioText) {
