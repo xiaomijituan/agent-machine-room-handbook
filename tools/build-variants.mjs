@@ -583,6 +583,7 @@ for (const chapter of chapters) {
 
   summary.push({
     chapter,
+    title: (md.match(/^# (.+)$/m) || [])[1] || chapter,
     juejinBytes: Buffer.byteLength(juejin),
     siteBytes: Buffer.byteLength(readFileSync(sitePath)),
     tableLines: table.split("\n").filter((line) => /^\| \d+ \|/.test(line))
@@ -607,13 +608,14 @@ copyFileSync(
   join(outSite, "vendor", vendorFile),
 );
 
-// 本地服务器不会替目录生成列表（site/serve.mjs 找不到 index.html 就回 404），
-// 所以这一页由构建生成，否则"产物在哪儿"只能靠读者猜文件名。
+// 这一页由构建生成：本地服务器不会替目录生成列表（site/serve.mjs 找不到 index.html 就回 404），
+// 而它现在也是公网部署的门面（Pages 发的根目录就是这一层），所以标题与说明按读者要看的写，
+// 不写"产物""字节数"这类构建内部的话——那些在 npm run build:site 的标准输出里就有。
 const indexRows = summary
   .map(
     (row) =>
-      `      <li><a href="./${row.chapter}.html">${row.chapter}</a>` +
-      ` <span>掘金版 ${row.juejinBytes} 字节 · 决策表 ${row.tableLines} 行</span></li>`,
+      `      <li><a href="./${row.chapter}.html">${escapeHtml(row.title)}</a>` +
+      ` <span>正文下面嵌着本章的模拟器，剧本已经递好</span></li>`,
   )
   .join("\n");
 writeFileSync(
@@ -623,7 +625,7 @@ writeFileSync(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>两个版式的产物 · agent 机房手册</title>
+    <title>agent 机房手册 · 章节目录</title>
     <style>
       body {
         font: 14px/1.7 system-ui, "Microsoft YaHei", sans-serif;
@@ -656,10 +658,12 @@ writeFileSync(
   </head>
   <body>
     <main>
-      <h1>两个版式的产物</h1>
+      <h1>《agent 机房手册》章节目录</h1>
       <p>
-        这一页由 <code>npm run build:site</code> 生成。下面每一行都是一个能动手的章节页；
-        掘金版在 <code>output/juejin/</code> 下，是给掘金那种只能发图文的渠道用的那一份。
+        让几个 AI 一起干活时，你的机器该长什么样。下面每一行都是一个能动手的章节页：正文下面嵌着
+        本章的模拟器，剧本已经递给它了，点格子、拍板、导出这一局都能做。这一页由仓库里的
+        <code>npm run build:site</code> 生成，随 <code>main</code> 分支自动部署，所以正文和
+        你点着的东西来自同一份来源。书里的数字都是在作者自己的机器上量出来的，没量到的写"没测到"。
       </p>
       <ul>
 ${indexRows}
