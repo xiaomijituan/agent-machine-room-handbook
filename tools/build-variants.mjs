@@ -10,10 +10,12 @@
 // HTML 整段删掉，留在那里只会让读者看到一片空白。
 import { execFileSync } from "node:child_process";
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
   readdirSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
@@ -281,11 +283,13 @@ function juejinDocument(chapter, md, table, scenarioText) {
 }
 
 function siteDocument(chapter, md, scenarioText, table) {
-  // 正文里的图片路径是相对本章目录写的（`assets/x.svg`），而产物页住在 output/site/ 下，
-  // 不重写就会 404。这里把相对路径改成从产物页出发能走到的真实位置。
+  // 正文里的图片路径是相对本章目录写的（`assets/x.svg`）。产物页住在 output/site/ 下，而
+  // output/site/ 这一层就是要整份搬上 GitHub Pages 的东西，所以配图会复制进
+  // output/site/assets/<本章>/，路径全部相对这一层写——换成任何子路径（Pages 的项目站住在
+  // /<仓库名>/ 下面）都不用再改一遍。
   const body = renderMarkdown(md).replace(
     /src="(?!https?:|\/)([^"]+)"/g,
-    (_m, path) => `src="../../chapters/${chapter}/${path}"`,
+    (_m, path) => `src="assets/${chapter}/${path.replace(/^assets\//, "")}"`,
   );
   return `<!doctype html>
 <html lang="zh">
@@ -430,10 +434,10 @@ ${
         <header>
           <h2>本章可玩的部分</h2>
           <button id="retry" type="button">重新注入这一章的剧本</button>
-          <a href="../../site/index.html">← 换一章</a>
+          <a href="index.html">← 换一章</a>
         </header>
         <div id="status">正在准备模拟器……</div>
-        <iframe id="sim" title="聚变模拟器" src="../../vendor/${vendorFile}"></iframe>
+        <iframe id="sim" title="聚变模拟器" src="vendor/${vendorFile}"></iframe>
         <details>
           <summary>注入失败怎么办（手工粘贴的退路，附本章剧本原文）</summary>
           <p>
@@ -522,6 +526,10 @@ ${
 }
 
 needReviewCli();
+// 每次构建都从空目录开始：删掉一章、或者改了配图文件名之后，旧产物留在原地会让人以为
+// 那个地址还有内容（output/ 是产物目录，不入库，删了不心疼）。
+rmSync(outSite, { recursive: true, force: true });
+rmSync(outJuejin, { recursive: true, force: true });
 mkdirSync(outSite, { recursive: true });
 mkdirSync(outJuejin, { recursive: true });
 
@@ -563,6 +571,23 @@ for (const chapter of chapters) {
       .length,
   });
 }
+
+// 页面里的路径全部相对 output/site/ 这一层，所以本章配图和模拟器复制件要搬进这一层。
+// 这一步是部署的前提：Pages 只发这一个目录，仓库里其余的东西它看不见。
+for (const chapter of chapters) {
+  const srcAssets = join(chaptersDir, chapter, "assets");
+  if (!existsSync(srcAssets)) continue;
+  const dstAssets = join(outSite, "assets", chapter);
+  mkdirSync(dstAssets, { recursive: true });
+  for (const name of readdirSync(srcAssets)) {
+    copyFileSync(join(srcAssets, name), join(dstAssets, name));
+  }
+}
+mkdirSync(join(outSite, "vendor"), { recursive: true });
+copyFileSync(
+  join(root, "vendor", vendorFile),
+  join(outSite, "vendor", vendorFile),
+);
 
 // 本地服务器不会替目录生成列表（site/serve.mjs 找不到 index.html 就回 404），
 // 所以这一页由构建生成，否则"产物在哪儿"只能靠读者猜文件名。

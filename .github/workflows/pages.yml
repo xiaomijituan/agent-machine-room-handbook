@@ -1,0 +1,83 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  # 设置里改完 Pages 的来源之后，需要有一次运行才能把产物推上去；这一条让人手动补那一次。
+  workflow_dispatch:
+
+# 部署的是 npm run build:site 的产物 output/site/，所以这一步排在 gates 之后由分支保护保证
+# 只有合格的提交才会被部署（gates 绿 + 必须走 PR）。
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # build:site 要用 fusion 发布的投影器投决策表（fusion 仓 ADR-0001：本仓库不抄一份规则）。
+      # 这里下的版本和 vendor/ 里那份模拟器、和 ci.yml 里写死的 FUSION_TAG 必须是同一个，
+      # 这条一致性由 scripts/check.mjs 守着，所以这里只按同一个 tag 下载。
+      - name: 下载 fusion 的投影器
+        env:
+          FUSION_TAG: v0.1.2
+        run: |
+          set -u
+          mkdir -p .fusion-tools
+          if ! curl -sSL --max-time 60 --retry 2 -o .fusion-tools/review-cli.mjs \
+               "https://github.com/xiaomijituan/fusion/releases/download/$FUSION_TAG/review-cli.mjs"; then
+            echo "下载 review-cli.mjs 失败。这是环境问题（按约定退出码 2），不是哪一章写坏了。"
+            exit 2
+          fi
+          if [ ! -s .fusion-tools/review-cli.mjs ]; then
+            echo "下载到的 review-cli.mjs 是空文件（退出码 2）。"
+            exit 2
+          fi
+
+      - name: 编译两个版式
+        run: npm run build:site
+
+      # 部署目录里必须有配图和模拟器复制件——tools/build-variants.mjs 会把它们复制进
+      # output/site/，页面里的路径全部相对这一层，所以站点挂在任何子路径下都不用改。
+      - name: 检查要部署的东西齐不齐
+        run: |
+          set -u
+          test -s output/site/index.html || { echo "缺 output/site/index.html"; exit 1; }
+          n=$(find output/site -maxdepth 1 -name '*.html' ! -name index.html | wc -l)
+          echo "章节页 $n 个"
+          [ "$n" -ge 9 ] || { echo "章节页少于 9 个，构建没跑全"; exit 1; }
+          [ -s output/site/vendor/fusion-sim-0.1.2.html ] || { echo "缺 vendor 复制件"; exit 1; }
+          a=$(find output/site/assets -name '*.svg' | wc -l)
+          echo "配图 $a 张"
+          [ "$a" -ge 9 ] || { echo "配图少于 9 张"; exit 1; }
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: output/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.out.outputs.page_url }}
+    steps:
+      - id: out
+        uses: actions/deploy-pages@v4
