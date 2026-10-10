@@ -1,0 +1,34 @@
+<svg width="1000" height="1040"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 1040"
+  role="img"
+  aria-label="四道关口从上到下排，右边一栏写各自跑在哪台机器上、绕不绕得过：第一道提交前钩子，跑在你自己的电脑上，能用 git commit --no-verify 绕过；第二道推送前钩子，还是你自己的电脑，能用 git push --no-verify 绕过，本手册仓库干脆没有这一道；第三道 CI 的 gates，跑在云上的机器，本地绕不过，八步里含真浏览器走查；第四道分支保护，跑在代码托管的服务器上，对我们自己不生效，因为管理员被豁免、推送照样成功。图底两条：前两道写着在你自己的电脑上，就等于没写；第四道的原文是 Bypassed rule violations 两条加末行推送成功，而非管理员会不会被硬拒本章未测"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <rect x="0" y="0" width="1000" height="1040" fill="#0d0f14" />
+
+  <text x="500" y="56" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">四道关口，只有跑在别人机器上的才算数</text>
+  <text x="500" y="104" text-anchor="middle" font-size="32" fill="#97a1b3">从上到下，"由不得你"的程度递增</text>
+
+  <rect x="40" y="140" width="920" height="150" rx="12" fill="#11141a" stroke="#242a36" stroke-width="3" />
+  <text x="64" y="188" font-size="34" font-weight="bold" fill="#e8ecf3">① 提交前钩子 —— 跑在你自己的电脑上</text>
+  <text x="64" y="240" font-size="32" fill="#f87171">能绕：git commit --no-verify</text>
+
+  <rect x="40" y="310" width="920" height="150" rx="12" fill="#11141a" stroke="#242a36" stroke-width="3" />
+  <text x="64" y="358" font-size="34" font-weight="bold" fill="#e8ecf3">② 推送前钩子 —— 还是你自己的电脑</text>
+  <text x="64" y="410" font-size="32" fill="#f87171">能绕：git push --no-verify；本手册仓库没有这一道</text>
+
+  <rect x="40" y="480" width="920" height="150" rx="12" fill="#11141a" stroke="#4ade80" stroke-width="3" />
+  <text x="64" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">③ CI 的 gates —— 跑在云上的机器</text>
+  <text x="64" y="580" font-size="32" fill="#4ade80">本地绕不过：八步，含真浏览器走查一遍</text>
+
+  <rect x="40" y="650" width="920" height="150" rx="12" fill="#11141a" stroke="#f87171" stroke-width="3" />
+  <text x="64" y="698" font-size="34" font-weight="bold" fill="#e8ecf3">④ 分支保护 —— 跑在代码托管的服务器上</text>
+  <text x="64" y="750" font-size="32" fill="#f87171">对我们自己不生效：管理员被豁免，推送照样成功</text>
+
+  <rect x="40" y="830" width="920" height="80" rx="10" fill="#242a36" />
+  <text x="500" y="880" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">看右边那句：写着"你自己的电脑"，就等于没写</text>
+
+  <text x="500" y="952" text-anchor="middle" font-size="32" fill="#97a1b3">④ 的原文：Bypassed rule violations 两条 + 末行 main -&gt; main</text>
+  <text x="500" y="1000" text-anchor="middle" font-size="32" fill="#97a1b3">非管理员会不会被硬拒，本章未测</text>
+</svg>

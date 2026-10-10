@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch08-four-gates",
+  "version": "0.1",
+  "name": "你说做完了不算，四道关口替我问一遍",
+  "hosts": [
+    {
+      "id": "dev-box",
+      "role": "你自己的机器",
+      "place": "前两道关口跑在这里，绕不绕得过去全看你"
+    },
+    {
+      "id": "ci-runner",
+      "role": "云上那台机器",
+      "place": "后两道在那里，不看你的脸色"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "commit-hook",
+      "project": "把关",
+      "title": "AI 说改完了，提交这一步",
+      "lines": {
+        "zh": [
+          "提交前跑格式化和内容检查",
+          "不过就不让提交，检查的是你交上去那份，不是你打算改的那份"
+        ]
+      },
+      "question": {
+        "text": "这块屏报「改完了，测试全过」，你先做哪件：",
+        "options": [
+          { "id": "run-gates", "label": "让提交前钩子跑一遍再提交" },
+          { "id": "skip-hook", "label": "信它，用 --no-verify 跳过钩子" },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "ci-gate",
+      "project": "把关",
+      "title": "本地过了，CI 那一关",
+      "lines": {
+        "zh": [
+          "类型、静态检查、测试、构建、剧本校验、真浏览器走查，一道不落",
+          "在自己机器上能绕过去的，到这里绕不过"
+        ]
+      },
+      "question": {
+        "text": "CI 红了。你的下一步是：",
+        "options": [
+          { "id": "read-log", "label": "打开那次运行日志，看红在第几步" },
+          { "id": "rerun-blind", "label": "什么都不看，先重跑一次试试" },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "branch-protection",
+      "project": "把关",
+      "title": "想直接推 main",
+      "lines": {
+        "zh": [
+          "服务器上的规则：必须走拉取请求、必绿、禁强推",
+          "前三道都写在你机器上，只有这一道在别人的机器上"
+        ]
+      },
+      "question": {
+        "text": "直推被拒了，你怎么做：",
+        "options": [
+          { "id": "open-pr", "label": "开一个拉取请求，等 gates 绿" },
+          { "id": "force-push", "label": "用 --force 推上去" },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "dev-box",
+      "task": "commit-hook",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 25
+    },
+    {
+      "host": "dev-box",
+      "task": "ci-gate",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 45
+    },
+    {
+      "host": "ci-runner",
+      "task": "branch-protection",
+      "kind": "opencode",
+      "status": "blocked",
+      "progress": 60
+    }
+  ]
+}

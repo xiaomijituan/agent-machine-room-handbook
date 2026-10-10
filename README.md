@@ -13,10 +13,12 @@
 | [第 3 章 三个 AI 同时干一个活](./chapters/03-three-ai-one-repo/index.md)               | 同一个仓库交给三个 AI 会出的乱子                   | 模拟器 + 本机网络实测             |
 | [第 4 章 AI 说它做完了](./chapters/04-proof-not-promise/index.md)                      | 怎么验收：看输出，别看结论                         | 本机 git 实测 + 模拟器            |
 | [第 5 章 三块屏都停着，你只有一句话](./chapters/05-one-sentence-three-desks/index.md)  | 派活：给谁、拆不拆、怎么算做完                     | 模拟器                            |
-| [第 6 章 终端窗口关掉了，正在跑的活会不会死](./chapters/06-kill-the-terminal/index.md) | 进程认的是父进程，不认窗口开不开；断网那一条没量到 | nohup / tmux                      |
+| [第 6 章 终端窗口关掉了，正在跑的活会不会死](./chapters/06-kill-the-terminal/index.md) | 进程认的是父进程，不认窗口开不开；断网那一条没量到 | 云端 Linux + 一台阿里云 ECS       |
 | [第 7 章 两台机器，一条虚拟局域网](./chapters/07-two-machines-one-tailnet/index.md)    | 连上不等于直连：十次全绕中继；重连后探测会慢到秒级 | 两台真机                          |
+| [第 8 章 你说做完了不算，四道关口替我问一遍](./chapters/08-four-gates/index.md)        | 把验收交给机器：四道关口，只有跑在别人机器上的算数 | 本机 git/CI + GitHub 服务端       |
 
-还有两章在等第二台设备到位：**连起两台电脑**、**断网了 AI 会不会丢**。
+原来"在等第二台设备"的那两章已经上线（第 6、7 章）。小册要 8–10 章，现在 8 章，
+**收口与否是编辑决定，不是工程量**——见 issue #7。
 
 ## 每章为什么有五个文件
 
