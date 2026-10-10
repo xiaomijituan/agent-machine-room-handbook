@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "id": "amr-ch09-release-artifacts",
+  "version": "0.1",
+  "name": "发版：把\"我做完了\"变成别人能跑的那一个文件",
+  "hosts": [
+    {
+      "id": "dev-box",
+      "role": "你这台机器",
+      "place": "产物在这里打出来，版本号的改动也从这里出去"
+    },
+    {
+      "id": "downstream-ci",
+      "role": "别人家的 CI",
+      "place": "只下载发布页上那三份文件，不读源码"
+    }
+  ],
+  "tasks": [
+    {
+      "key": "version-one-place",
+      "project": "发版",
+      "title": "版本号写在哪",
+      "lines": {
+        "zh": [
+          "发版标签、运行记录头部、产物文件名，三处要报同一个数",
+          "写两遍的代价是它们会在某一天各说各话"
+        ]
+      },
+      "question": {
+        "text": "要发一个新版本，版本号先改哪里：",
+        "options": [
+          { "id": "one-place", "label": "只改那一处源头，其余跟着生成" },
+          {
+            "id": "three-places",
+            "label": "三处各手写一遍，改的时候记得勤快点"
+          },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "immutable-assets",
+      "project": "发版",
+      "title": "发出去的文件改不了",
+      "lines": {
+        "zh": [
+          "发布页上那份资产，别人可能已经拿走了",
+          "标签可以挪到别的提交，已经下载走的东西收不回来"
+        ]
+      },
+      "question": {
+        "text": "文档里写的产物字节数是旧的，产物已经发布，你做哪件：",
+        "options": [
+          {
+            "id": "rebuild-align",
+            "label": "重打并把标签挪到文档与产物一致的那棵树上"
+          },
+          { "id": "swap-quietly", "label": "悄悄替换同名资产，反正文件名没变" },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    },
+    {
+      "key": "verify-by-download",
+      "project": "发版",
+      "title": "拿回来验，才算发出去",
+      "lines": {
+        "zh": [
+          "从发布页下载回来算字节和校验和，再拿它跑一遍",
+          "只看构建日志说成功，等于没验"
+        ]
+      },
+      "question": {
+        "text": "依赖别人发的产物，验证做到哪一步：",
+        "options": [
+          {
+            "id": "download-verify",
+            "label": "下载回来核对，并用下回来的那份真跑一次"
+          },
+          { "id": "trust-log", "label": "对方 CI 绿了就算通过" },
+          { "id": "kill", "label": "这块屏不管了，关掉" }
+        ]
+      }
+    }
+  ],
+  "panes": [
+    {
+      "host": "dev-box",
+      "task": "version-one-place",
+      "kind": "claude",
+      "status": "blocked",
+      "progress": 30
+    },
+    {
+      "host": "dev-box",
+      "task": "immutable-assets",
+      "kind": "codex",
+      "status": "blocked",
+      "progress": 55
+    },
+    {
+      "host": "downstream-ci",
+      "task": "verify-by-download",
+      "kind": "opencode",
+      "status": "blocked",
+      "progress": 20
+    }
+  ]
+}

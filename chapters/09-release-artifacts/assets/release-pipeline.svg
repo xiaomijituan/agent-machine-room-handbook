@@ -1,0 +1,35 @@
+<svg width="1000" height="1060"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 1060"
+  role="img"
+  aria-label="发版是一条单向路，四步从上到下：第一步在你自己的机器上打出三份文件，版本号只有一个源头 APP_VERSION 等于 0.1.2；第二步发布页，三份资产挂上 v0.1.2，真实字节是 404,823、8,933、138,590；第三步别人家的 CI，一条 curl 下载就用，只下载产物不读源码，下载次数 12；第四步你自己，下载回来核字节与校验和再拿它跑一遍，不下载只信日志等于没验。图底三条：发出去的东西改不了，能挪的只有标签；v0.1.2 的标签指向一个只改文档的提交，目的是让文档里的字节数跟产物一致；先构建、再量、最后写文档，404,476 是第一次修复后的数、重打之后是 404,823；第三方撤回与删资产后下游怎么失败本章未测"
+  font-family="system-ui, 'Microsoft YaHei', 'PingFang SC', sans-serif"
+>
+  <rect x="0" y="0" width="1000" height="1060" fill="#0d0f14" />
+
+  <text x="500" y="56" text-anchor="middle" font-size="38" font-weight="bold" fill="#e8ecf3">发版是一条单向路：打出去，就收不回来</text>
+  <text x="500" y="104" text-anchor="middle" font-size="32" fill="#97a1b3">每一步的数字都从发布页和本机 Git 里读到，不是提纲</text>
+
+  <rect x="40" y="140" width="920" height="150" rx="12" fill="#11141a" stroke="#242a36" stroke-width="3" />
+  <text x="64" y="188" font-size="34" font-weight="bold" fill="#e8ecf3">① 你这台机器：打出三份文件</text>
+  <text x="64" y="240" font-size="32" fill="#97a1b3">版本号只有一个源头：APP_VERSION = "0.1.2"</text>
+
+  <rect x="40" y="310" width="920" height="150" rx="12" fill="#11141a" stroke="#242a36" stroke-width="3" />
+  <text x="64" y="358" font-size="34" font-weight="bold" fill="#e8ecf3">② 发布页：三份资产挂上 v0.1.2</text>
+  <text x="64" y="410" font-size="32" fill="#97a1b3">真实字节：404,823 / 8,933 / 138,590</text>
+
+  <rect x="40" y="480" width="920" height="150" rx="12" fill="#11141a" stroke="#4ade80" stroke-width="3" />
+  <text x="64" y="528" font-size="34" font-weight="bold" fill="#e8ecf3">③ 别人家的 CI：一条 curl 下载就用</text>
+  <text x="64" y="580" font-size="32" fill="#4ade80">只下载产物、不读源码 —— 下载次数 12</text>
+
+  <rect x="40" y="650" width="920" height="150" rx="12" fill="#11141a" stroke="#4ade80" stroke-width="3" />
+  <text x="64" y="698" font-size="34" font-weight="bold" fill="#e8ecf3">④ 你自己：下载回来核一遍</text>
+  <text x="64" y="750" font-size="32" fill="#4ade80">字节与校验和对上，再拿那份跑一遍</text>
+
+  <rect x="40" y="830" width="920" height="80" rx="10" fill="#242a36" />
+  <text x="500" y="880" text-anchor="middle" font-size="32" font-weight="bold" fill="#e8ecf3">发出去的东西改不了；能挪的只有标签</text>
+
+  <text x="500" y="946" text-anchor="middle" font-size="32" fill="#97a1b3">v0.1.2 的标签指向一个只改文档的提交：让文档里的字节数跟产物一致</text>
+  <text x="500" y="996" text-anchor="middle" font-size="32" fill="#f87171">先构建、再量、最后写文档：404,476 是旧的，重打之后 404,823</text>
+  <text x="500" y="1044" text-anchor="middle" font-size="32" fill="#97a1b3">第三方撤回、删资产后下游怎么失败：本章未测</text>
+</svg>
