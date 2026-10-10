@@ -7,6 +7,7 @@
   "scripts": {
     "check": "node scripts/check.mjs",
     "build:site": "node tools/build-variants.mjs",
+    "juejin:paste": "node tools/make-juejin-paste.mjs",
     "serve:site": "node site/serve.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
