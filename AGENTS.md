@@ -41,7 +41,7 @@ CI（`.github/workflows/ci.yml` 里那个叫 `gates` 的作业）的顺序是：
 chapters/NN-slug/
   index.md          # 正文，纯 Markdown（要能整段粘去掘金）
   scenario.json     # 可玩剧本，fusion 的剧本格式
-  reference.jsonl   # 我们真跑出来的一局记录，用来跟读者那局对拍
+  reference.jsonl   # 我们真跑出来的一局记录，用来跟任何人重跑出来的那一局对拍
   verify.md         # 验证记录：测到什么、没测到什么、涂改了哪几处
   china.md          # 国内网络差异卡片：命令 → 看到的 → 坑
 ```
@@ -70,7 +70,7 @@ chapters/NN-slug/
   被改写一次就对不上了。这件事已经用 `.prettierignore` 挡住，`check.mjs` 的第七条会核对
   页面引用的文件名与 `vendor/` 里实际存在的那份一致（两条反向测试都会红：改掉页面里的版本、
   把复制件移走）。
-- **`site/` 只是本地阅读和试玩用的壳**，不部署到任何地方，也不联网。它怎么工作、怎么验证写在
+- **`site/` 只是本地阅读和试玩用的壳**，不部署到任何地方，也不联网。工作方式与验证方法写在
   `site/README.md`。
 - **别引入后端、账号、排行榜**（fusion 仓 ADR-0005：文件即分享物）。
 - 采集证据的命令，标签一律用英文——终端是中文环境时中文标签会变乱码，

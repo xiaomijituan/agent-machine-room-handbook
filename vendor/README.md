@@ -28,7 +28,7 @@
 
 fusion 的 ADR-0001 规定项目三只能依赖发布产物，ADR-0008 进一步规定嵌入用的必须是**我们自己仓库里的副本**。理由很直接：如果每一章都去嵌 fusion 部署在互联网上的那个地址，那个站点哪天挂掉或者改了接口，整本书里能动手操作的部分会同时失效，而我们没有办法单独回滚其中一章。
 
-## 怎么换成新版本
+## 如何换成新版本
 
 1. 到 fusion 的 Release 页面选一个更新的版本，记下它的版本号。
 2. 用 `curl -L -o vendor/fusion-sim-<新版本>.html https://github.com/xiaomijituan/fusion/releases/download/<新版本>/fusion-sim-<新版本>.html` 下载。
@@ -46,4 +46,4 @@ fusion 在 `0.1.0` 之后重发过两次。`0.1.1` 改的是四条：事件流�
 
 ## 这份复制件被谁用
 
-`site/chapter.html` 把本页面的 iframe 指向它，再用 `postMessage` 把本章的 `chapters/<章节目录>/scenario.json` 交给模拟器。页面本身怎么用、怎么验证，写在 `site/README.md`。
+`site/chapter.html` 把本页面的 iframe 指向它，再用 `postMessage` 把本章的 `chapters/<章节目录>/scenario.json` 交给模拟器。页面的用法与验证方法写在 `site/README.md`。
