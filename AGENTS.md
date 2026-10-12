@@ -76,6 +76,17 @@ chapters/NN-slug/
 - 采集证据的命令，标签一律用英文——终端是中文环境时中文标签会变乱码，
   而输出要一字不改地进仓库。
 
+- **提交身份要逐条命令传参，不要依赖本机 git 配置。** 本机的 `user.name` / `user.email` 是真名和
+  私人邮箱，而这两个仓库对外只以 `xiaomijituan` 的名义发布。所以每次提交（包括修改提交正文的
+  `--amend`）都要带上 `--author="xiaomijituan <xiaomijituan@users.noreply.github.com>"`，
+  同时设置 `GIT_COMMITTER_NAME` / `GIT_COMMITTER_EMAIL` 这两个环境变量——只设环境变量改的是
+  提交者，作者仍然是本机身份。**推送之前必须核对作者**：
+  `git log -n<N> --pretty="%h | author=%an <%ae>"`，一条一条看完。2026-10-12 就是因为漏了
+  `--author` 把私人邮箱推到了公开仓库，修它需要临时放开服务端分支保护的强推许可。
+  用钩子来挡这道检查**暂不实现**（作者 2026-10-12 定），这条先当规矩执行。
+- 修改 `main` 的历史前先看有没有 tag 和已发布的 Release 指向它：
+  已被 Release 消费的 tag 不该重指，动了要把 consequences 说清再动。
+
 ## 仓库边界（什么不提交）
 
 - `任务*.md`、`docs/GIT.md`、`docs/build-log.md`、`docs/grill-checkpoint.md`、
