@@ -16,13 +16,13 @@ wsl.exe -l -v            # 返回「未安装适用于 Linux 的 Windows 子系�
 - **走 Linux 子系统（WSL）**：要 `wsl.exe --install`，要开虚拟化，**要重启一次电脑**。装完你就有一个真的 Ubuntu，`apt install tmux` 直接能用。
 - **用云端主机**：不用动自己的电脑，我们这一章的证据就是这么来的。
 
-**坑（很重要）**：装了 Git Bash **不等于**有 tmux。Git Bash 只是给了你一个 bash 命令行，tmux 需要的是它背后那个"终端设备"，Git Bash 里没有。别在 Git Bash 里找 `tmux`，找不到不是装错了，是本来就没有。
+**一个容易误判的点（很重要）**：装了 Git Bash **不等于**有 tmux。Git Bash 只是提供了一个 bash 命令行，而 tmux 需要的是命令行背后的"终端设备"，Git Bash 里没有这一层设备。不要在 Git Bash 里找 `tmux`——找不到不是装错了，是本来就没有。
 
 **还有一条我们没验**：有人用 Cygwin 在 Windows 上跑 tmux。**这本书不推荐，因为没实测。** 你试出来了欢迎来告诉我们。
 
 ## 二、Ubuntu 上装 tmux（这条是实测，但是境外源）
 
-**我们实测到的**：那台云端 Ubuntu 22.04 上 **tmux 是预装好的**，版本 3.2a。所以这章的证据里，`apt-get install -y tmux` 那句返回的是：
+**我们实测到的**：那台云端 Ubuntu 22.04 上 **tmux 是预装好的**，版本 3.2a。所以第 1 章的证据里，`apt-get install -y tmux` 那句返回的是：
 
 ```
 tmux is already the newest version (3.2a-4ubuntu0.2).
@@ -41,7 +41,7 @@ apt-get install -y tmux && tmux -V
 
 ## 三、这台机器上 npm 和 GitHub 直连不通（这条是实测）
 
-不是 tmux 的问题，但你装 tmux 前后一定会撞上，因为手册后面几章要你克隆仓库、装依赖。
+问题不在 tmux 本身，但你在装 tmux 前后一定会遇到，因为手册后面几章要求克隆仓库、安装依赖。
 
 **实测到的现象**：
 
@@ -58,13 +58,13 @@ git -c http.version=HTTP/1.1 -c http.proxy=http://127.0.0.1:7897 push
 npm install --registry=https://registry.npmmirror.com
 ```
 
-**坑（两个都踩过）**：
+**容易出错的两处（我们都踩过）**：
 
-1. **推 GitHub 要加 `http.version=HTTP/1.1`。** 只设代理不加这个，HTTP/2 协商会失败，报一堆看不懂的错。加上就通了。
-2. **走镜像装包，镜像地址会写进 `package-lock.json`。** 队友从国外拉这个 lockfile 会连不上国内镜像。要么统一约定，要么提交前把 lockfile 用官方源重新生成一次。
+1. **推 GitHub 要加 `http.version=HTTP/1.1`。** 只设代理而不加这一项，HTTP/2 协商会失败，报出一堆难以辨认的错误；加上这一项就能推送成功。
+2. **走镜像装包，镜像地址会写进 `package-lock.json`。** 队友从国外拉这份 lockfile 会连不上国内镜像。要么统一约定，要么提交前把 lockfile 用官方源重新生成一次。
 
 ## 这张卡片的规矩
 
 - **只有真跑过的才能写成结论。** 跑过但要别人复现的，写清楚是哪台机器、什么版本。
-- **没跑过的，标"没实测"，并把要跑的命令列出来**，让读到的人帮我们验。
-- 每条都要有"命令 → 我们看到的 → 坑"三段。
+- **没跑过的，标"没实测"，并把要跑的命令列出来**，请跑过的人把结果发回来。
+- 每条都要有"命令 → 我们看到的 → 容易出错之处"三段。
