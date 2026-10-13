@@ -301,6 +301,9 @@ function juejinDocument(chapter, md, table, scenarioText) {
 }
 
 function siteDocument(chapter, md, scenarioText, table) {
+  // 浏览器标签页和搜索结果用的是章标题，不是章节目录名——`03-three-ai-one-repo` 那种名字
+  // 对没进过仓库的人来说等于没标题。
+  const heading = (md.match(/^# (.+)$/m) || [])[1] || chapter;
   // 正文里的图片路径是相对本章目录写的（`assets/x.svg`）。产物页住在 output/site/ 下，而
   // output/site/ 这一层就是要整份搬上 GitHub Pages 的东西，所以配图会复制进
   // output/site/assets/<本章>/，路径全部相对这一层写——换成任何子路径（Pages 的项目站住在
@@ -314,7 +317,7 @@ function siteDocument(chapter, md, scenarioText, table) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${escapeHtml(chapter)} · agent 机房手册</title>
+    <title>${escapeHtml(heading)} · agent 机房手册</title>
     <style>
       :root {
         --bg: #0d0f14;
