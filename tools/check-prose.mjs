@@ -1,8 +1,8 @@
 // 语域检查。只扫 chapters/ 下的 Markdown——STYLE.md 和 README.md 里必须写着反例本身，
 // 扫它们等于让规矩检查自己打自己。
 //
-// 这份脚本管五件事：语域黑名单、正文里的"读者"、自称词（本章/本节/这一节/这一段）计数、
-// 每段"你"出现超过一次、小节标题里的疑问式口语。
+// 这份脚本管六件事：语域黑名单、正文里的"读者"、自称词（本章/本节/这一节/这一段）计数、
+// 每段"你"出现超过一次、小节标题里的疑问式口语、双音词被压成单音（裸用的"量"该写"测量"）。
 //
 // 它故意不管两件事，因为探针给不出可靠的数：代号在读者那边能不能落地、句子有没有真正的论元。
 // 那两条要人判，写进 STYLE.md 第七条的末尾。
@@ -30,6 +30,11 @@ const BLACKLIST = [
   "那章",
 ];
 const SELF_REFERENCE = ["本章", "本节", "这一节", "这一段"];
+// 双音词被压成单音：动词"量"该写"测量"。前面的字要排掉那些本来就是复合词的情况
+// （流量、变量、数量、质量、重量、尽量、容量、度量、计算量、样本量、测量），
+// 后面要求跟着一个补语（到/过/出/得了/一次/这/那/遍），这才是动词用法。
+const BARE_MEASURE =
+  /(?:^|[^测流变数质重尽力容度能计样衡理])量[到过出得了次这那遍一]/;
 const READERS = "读者";
 const TITLE_SPOKEN = ["怎么", "什么时候", "干嘛", "咋", "吗"];
 
@@ -127,6 +132,13 @@ for (const file of collect(root)) {
             detail: `「${word}」 —— ${line.trim().slice(0, 60)}`,
           });
         }
+      }
+      if (BARE_MEASURE.test(line)) {
+        hits.push({
+          kind: "双音词被压成单音（裸用的量）",
+          where: `${label}:${number}`,
+          detail: `该写"测量" —— ${line.trim().slice(0, 60)}`,
+        });
       }
       if (line.includes(READERS)) readerLines.push(number);
       const found = SELF_REFERENCE.filter((word) => line.includes(word));
