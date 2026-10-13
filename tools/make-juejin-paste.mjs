@@ -74,12 +74,20 @@ let body = original.replace(
       `这张图要这样生成：在装了中文字体的机器上把 ${path} 按 2 倍尺寸渲染成 PNG`,
       "（2000 宽或更宽；实测 2 倍 PNG 上传后中文完整、显示尺寸正常）。",
       "",
-      "图注用这句（掘金把它写进 img 的 alt 属性，页面上不显示，别指望它当图注）：",
-      alt,
+      "**图：** " + alt,
       "",
     ].join("\n");
   },
 );
+
+// 站点试玩页的地址是 127.0.0.1，读者点开只会得到"无法访问"。掘金这一版换成已部署的 Pages 地址；
+// 下面那条自检原来只管"标记还在不在"，拦不住这种链接合法但对外人打不开的情况。
+body = body.replace(
+  /在仓库根目录执行 `npm run serve:site`，然后打开 <http:\/\/127\.0\.0\.1:5280\/site\/chapter\.html\?chapter=([0-9a-z-]+)>/g,
+  "打开我们部署好的站点 <https://xiaomijituan.github.io/agent-machine-room-handbook/$1.html>",
+);
+if (/127\.0\.0\.1:5280/.test(body))
+  failures.push("还留着 127.0.0.1:5280 的本地地址，读者点开只会得到无法访问");
 
 if (firstH1) {
   body = body
