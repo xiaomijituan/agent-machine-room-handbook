@@ -1,2 +1,3 @@
 npm run check
 npx prettier --check .
+npm run prose:strict
