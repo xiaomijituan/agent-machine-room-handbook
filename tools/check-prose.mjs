@@ -1,7 +1,7 @@
 // 语域检查。只扫 chapters/ 下的 Markdown——STYLE.md 和 README.md 里必须写着反例本身，
 // 扫它们等于让规矩检查自己打自己。
 //
-// 这份脚本管六件事：语域黑名单、正文里的"读者"、自称词（本章/本节/这一节/这一段）计数、
+// 这份脚本管六件事：语域黑名单（含"那条路"这类空间比喻）、正文里的"读者"、自称词（本章/本节/这一节/这一段）计数、
 // 每段"你"出现超过一次、小节标题里的疑问式口语、双音词被压成单音（裸用的"量"该写"测量"）。
 //
 // 它故意不管两件事，因为探针给不出可靠的数：代号在读者那边能不能落地、句子有没有真正的论元。
@@ -28,6 +28,11 @@ const BLACKLIST = [
   "顺手",
   "这章",
   "那章",
+  // 空间比喻顶替机制说法：见 STYLE.md 第七节的病因表最后一行
+  "那条路",
+  "哪条路",
+  "两条路",
+  "这条路",
 ];
 const SELF_REFERENCE = ["本章", "本节", "这一节", "这一段"];
 // 双音词被压成单音：动词"量"该写"测量"。前面的字要排掉那些本来就是复合词的情况
@@ -54,18 +59,35 @@ const collect = (dir) => {
   return out;
 };
 
-// 代码块内不算文笔；行内代码里的标识符也不算。署名行是许可证文本。
-const strip = (line, insideFence) => {
-  if (insideFence) return "";
+// 代码块内不算文笔；行内代码里的标识符也不算；署名行是许可证文本。
+// 引号里是当时敲进模拟器的那句话、剧本台词或原始输出——那些是证据，一字不改，也不该算成我们
+// 自己写的说明文字。配对必须跨行做：一段引文被 Markdown 换行劈成两行时，按行配对会错乱
+// （它曾把记账里"两条路"这种被引用的旧说法当成裸用），所以这里用一个带状态的扫描。
+const strip = (line, state) => {
   if (/^\s*>\s*©|^\s*©/.test(line)) return "";
-  // 引号里是当时敲进模拟器的那句话、或者剧本台词、或者原始输出——那些是证据，一字不改，
-  // 所以也不该被语域检查算成我们自己写的说明文字。
-  const stripped = line
-    .replace(/“[^”]*”/g, "")
-    .replace(/"[^"]*"/g, "")
+  const plain = line
     .replace(/`[^`]*`/g, "")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, "");
-  return stripped;
+  let out = "";
+  for (const ch of plain) {
+    if (ch === "“") {
+      state.quote = true;
+      out += " ";
+      continue;
+    }
+    if (ch === "”") {
+      state.quote = false;
+      out += " ";
+      continue;
+    }
+    if (ch === '"') {
+      state.quote = !state.quote;
+      out += " ";
+      continue;
+    }
+    out += state.quote ? " " : ch;
+  }
+  return out;
 };
 
 const hits = [];
@@ -74,7 +96,7 @@ const perChapter = new Map();
 for (const file of collect(root)) {
   const label = file.slice(root.length + 1).replace(/\\/g, "/");
   const lines = readFileSync(file, "utf8").split(/\r?\n/);
-  let insideFence = false;
+  const state = { fence: false, quote: false };
   let paragraph = [];
   let paragraphStart = 0;
   const selfCount = [];
@@ -97,10 +119,10 @@ for (const file of collect(root)) {
   lines.forEach((raw, index) => {
     const number = index + 1;
     if (/^\s*(```|~~~)/.test(raw)) {
-      insideFence = !insideFence;
+      state.fence = !state.fence;
       return;
     }
-    const line = strip(raw, insideFence);
+    const line = strip(raw, state);
     if (!line.trim()) {
       flushParagraph(number);
       return;
@@ -146,6 +168,17 @@ for (const file of collect(root)) {
     }
   });
   flushParagraph(lines.length + 1);
+
+  // 探针自检：扫到文件末尾还停在"引号里"，说明这个文件的引号数是奇数。
+  // 那样会有一大段正文被当成引文吞掉，检查会假绿——所以把它报出来，不悄悄放过。
+  if (state.quote) {
+    hits.push({
+      kind: "引号没配平（探针可能吞掉了一段正文）",
+      where: `${label}`,
+      detail:
+        "文件末尾仍处于引号内：本文件的引号数量是奇数，请补齐或把被引用的原文改用行内代码",
+    });
+  }
 
   if (readerLines.length) {
     hits.push({

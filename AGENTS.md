@@ -43,7 +43,7 @@ chapters/NN-slug/
   scenario.json     # 可玩剧本，fusion 的剧本格式
   reference.jsonl   # 我们真跑出来的一局记录，用来跟任何人重跑出来的那一局对拍
   verify.md         # 验证记录：测到什么、没测到什么、涂改了哪几处
-  china.md          # 国内网络差异卡片：命令 → 看到的 → 坑
+  china.md          # 国内网络差异卡片：命令 → 看到的 → 要避开的错误
 ```
 
 `verify.md` 有五个必填点，`check.mjs` 会查：机器、版本、没测、等级、涂改。

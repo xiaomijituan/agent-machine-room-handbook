@@ -11,7 +11,7 @@ command -v tmux          # 我们在这台 Windows 上跑，结果是空
 wsl.exe -l -v            # 返回「未安装适用于 Linux 的 Windows 子系统」
 ```
 
-**结论**：Windows 上装 tmux 有两条路，我们这台机器两条都不通。
+**结论**：Windows 上装 tmux 有两种办法，我们这台机器两种都不通。
 
 - **走 Linux 子系统（WSL）**：要 `wsl.exe --install`，要开虚拟化，**要重启一次电脑**。装完你就有一个真的 Ubuntu，`apt install tmux` 直接能用。
 - **用云端主机**：不用动自己的电脑，我们这一章的证据就是这么来的。
