@@ -46,7 +46,7 @@ https://login.tailscale.com http=302 total=0.790480s
 
 ```
 $ tailscale ping -c 5 <peer-100.x.y.z>
-pong from <phone> (100.104.0.2) via 192.0.2.184:34111 in 14ms
+pong from <phone> (100.x.y.z) via 192.0.2.184:34111 in 14ms
 
 $ tailscale ping -c 5, output masked
 pong from <phone> (100.x.y.z) via <lan-ip:port> in 6ms
@@ -56,7 +56,7 @@ pong from <phone> (100.x.y.z) via <lan-ip:port> in 6ms
 
 - 公网 IP → 203.0.113.9（文档保留段）
 - 内网地址 3 个 → 192.0.2.x（文档保留段）
-- tailnet IP 1 个 → 100.104.0.2
+- tailnet IP → 100.x.y.z（这一行以前写的是替换目标的原值，等于把要掩码的地址留在了说明里；2026-10-14 改掉。`scripts/check.mjs` 同时把 100.64/10 这一段从白名单里移出，这类地址以后连出现在说明里都会被门禁拦下）
 - 手机主机名 → <phone>；本机主机名 → <this-box>；tailnet 账号 → <account>
 
 注意：`via` 后面那个地址（占位符 192.0.2.184 原来的值）是一个**内网地址**，不是公网地址。也就是说这次测到的只是"同一个局域网里走直连"，**没有测到跨网络打洞**。含义与下一步见 verify.md。
