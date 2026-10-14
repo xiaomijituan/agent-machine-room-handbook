@@ -16,7 +16,9 @@ wsl.exe -l -v            # 返回「未安装适用于 Linux 的 Windows 子系�
 - **走 Linux 子系统（WSL）**：要 `wsl.exe --install`，要开虚拟化，**要重启一次电脑**。装完你就有一个真的 Ubuntu，`apt install tmux` 直接能用。
 - **用云端主机**：不用动自己的电脑，我们这一章的证据就是这么来的。
 
-**一个容易误判的点（很重要）**：装了 Git Bash **不等于**有 tmux。Git Bash 只是提供了一个 bash 命令行，而 tmux 需要的是命令行背后的"终端设备"，Git Bash 里没有这一层设备。不要在 Git Bash 里找 `tmux`——找不到不是装错了，是本来就没有。
+**一个容易误判的点（很重要）**：装了 Git Bash **不等于**有 tmux。这一条我们是实测的：在作者那台 Windows 机器的 Git Bash 里执行 `command -v tmux`，返回空（退出码 1），同一个 shell 里 `command -v script` 也是空，`ls -d /dev/pts` 报 `No such file or directory`——**这套 Git Bash 里既没有 tmux 这个程序，也没有 tmux 要用到的 Unix 伪终端设备目录**。所以不要在 Git Bash 里找 `tmux`：找不到不是装错了，是本来就没有。
+
+**这一层设备为什么重要**：tmux 要给自己和每一块屏幕各配一个伪终端（Linux 上是 `/dev/pts/*`），而实测显示这个环境里 `winpty`（Git for Windows 自带的一个终端转接层，路径 `/usr/bin/winpty`）在 stdin 不是终端时直接拒绝启动，报 `stdin is not a tty`。**Git Bash 能不能靠 `winpty` 之类的方式补出这一层设备、补出来之后 tmux 能不能跑，我们没有实测**，所以这里不下结论——只说清楚已经实测到的部分：程序没有、`/dev/pts` 没有。
 
 **还有一条我们没验**：有人用 Cygwin 在 Windows 上跑 tmux。**这本书不推荐，因为没实测。** 你试出来了欢迎来告诉我们。
 

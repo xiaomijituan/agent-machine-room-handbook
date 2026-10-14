@@ -57,7 +57,8 @@
 ## 未证明的部分（诚实记录）
 
 - **没有证明"关掉终端窗口一定会带走普通后台任务"这句话本身。** 反倒有一次实测显示：在一个"每条命令都起一个独立 shell"的环境里，一个用 `&` 丢到后台的任务**活了下来**，父进程变成 1 号（`evidence/tmux-evidence-part2.md` 第 3 节）。原因是那个环境里根本没有可以关闭的"终端窗口"。所以书里要说清楚：**"放到后台"和"放进 tmux"解决的不是同一个问题**——`&` 管的是"我这会儿不想盯着这条命令"，tmux 管的是"终端没了，命令还得活着"。
-- **没在 Windows 上测过任何一步。** 作者那台机器没有 tmux、没有 Linux 子系统。书里 Windows 的部分只能写装不了的原因与出路，见 `china.md`。
+- **Windows 侧在 2026-10-14 补测了一部分，另一部分仍然没测。** 已经测量到的（作者本机，Windows 10.0.26200，Git Bash 的 bash 是 `4.4.23(1)-release (x86_64-pc-msys)`，`uname -s` 返回 `MINGW64_NT-10.0-26200`）：`command -v tmux` 返回空、退出码 1；`command -v script` 返回空；`ls -d /dev/pts` 报 `No such file or directory`；`/usr/bin/winpty` 与 `winpty-agent.exe` 在场。**仍然没测的**：Git Bash 能不能靠 `winpty` 这一类转接层补出 tmux 需要的伪终端，以及补出来之后 tmux 能不能跑。`china.md` 里那段"装了 Git Bash 不等于有 tmux"已经按这两档改写。
+- **一条探测方法的教训（写给后面复现的人）**：这台机器上 `tty`、`stty`、`python -c "sys.stdout.isatty()"` 三组探测**不能当证据使用**。原因是这些命令都通过一个把标准输出接成管道的自动化通道执行，探测读到的必然是"不是终端"；故意加一道对照——`bash -c 'tty' | cat`——输出与那三次一模一样（都是 `not a tty`）。同一个 shell 里 `sys.stdin.isatty()` 是 `True`、`sys.stdout.isatty()` 是 `False`，这正是"输出被接走"的特征；`winpty tty` 也在同一个位置失败，报 `stdin is not a tty`。**要判断某个终端本身是不是终端，探测不能经过管道**：得由人在桌面上打开那个终端窗口直接敲，或者用另一台真的伪终端做对照。
 - **没测多用户、没测 tmux 配置文件（`~/.tmux.conf`）、没测鼠标与快捷键的实际手感。** 这些不在本章承诺范围内，不要随口写进正文。
 - **没测过配图本身。** `assets/one-screen-per-agent.svg` 是示意图，不是屏幕实拍：图里每个元素都取自本章正文和 `scenario.json` 已经写明的东西（三块屏各跑 claude / codex / opencode、codex 那块卡在等回答、人只在拍板时出现），图上没有新增任何实测结论。
 
